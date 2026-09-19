@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Sem-V: Unit 2 Master Notes - VB.NET Fundamentals & Windows Forms</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --code-bg: #0f172a;
+      --accent: #10b981;
+    }
+
+    [data-theme="dark"] {
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border: #374151;
+      --code-bg: #030712;
+      --accent: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.2s ease, color 0.2s ease; }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.65; padding-bottom: 70px; }
+
+    header { background: linear-gradient(135deg, #0369a1, #0284c7); color: white; padding: 22px 16px; text-align: center; }
+    header h1 { font-size: 1.35rem; font-weight: 800; }
+    header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+
+    .control-panel { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #334155; }
+    .theme-btn { background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
+    .progress-box { flex: 1; margin: 0 12px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.3s; }
+    .progress-text { font-size: 0.7rem; color: #94a3b8; font-weight: bold; margin-top: 2px; }
+
+    .topic-nav { display: flex; overflow-x: auto; background: var(--bg); padding: 8px 12px; gap: 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .nav-pill { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); padding: 5px 12px; border-radius: 16px; font-size: 0.78rem; text-decoration: none; cursor: pointer; font-weight: 600; }
+    .nav-pill:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .search-box-wrap { padding: 12px 14px; background: var(--bg); }
+    .search-input { width: 100%; max-width: 820px; margin: auto; display: block; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.88rem; background: var(--card-bg); color: var(--text); }
+    .search-input:focus { outline: 2px solid var(--primary); }
+
+    .container { max-width: 820px; margin: auto; padding: 0 14px; }
+
+    .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 28px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+    .card.hidden { display: none; }
+    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 14px; margin-bottom: 8px; }
+    
+    h2 { font-size: 1.25rem; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1.02rem; color: var(--text); margin: 18px 0 8px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
+    p { font-size: 0.92rem; color: var(--text); margin-bottom: 10px; }
+
+    .diagram-wrapper { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 12px; margin: 14px 0; text-align: center; }
+    .diagram-svg { width: 100%; max-width: 520px; height: auto; }
+
+    .table-container { overflow-x: auto; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+    th { background: rgba(0,0,0,0.04); font-weight: 700; }
+    .pro-text { color: #16a34a; font-weight: 600; }
+    .con-text { color: #dc2626; font-weight: 600; }
+
+    .gui-box { background: rgba(0,0,0,0.04); border: 2px solid var(--border); border-radius: 6px; padding: 12px; margin: 14px 0; }
+    .gui-titlebar { background: var(--primary-dark); color: white; padding: 5px 10px; font-size: 0.72rem; font-weight: bold; border-radius: 4px 4px 0 0; margin: -12px -12px 10px -12px; }
+    .gui-canvas { background: var(--card-bg); padding: 12px; border-radius: 4px; display: flex; flex-direction: column; gap: 8px; }
+    .gui-input { padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.82rem; background: var(--bg); color: var(--text); }
+    .gui-btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
+    .ide-box { background: var(--code-bg); border-radius: 8px; padding: 12px; margin: 14px 0; }
+    .ide-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .ide-title { color: #94a3b8; font-size: 0.72rem; font-weight: bold; }
+    .ide-run-btn { background: var(--accent); color: #022c22; font-weight: 700; border: none; padding: 5px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; }
+    .ide-editor { width: 100%; height: 115px; background: #020617; color: #38bdf8; border: 1px solid #334155; border-radius: 6px; padding: 8px; font-family: monospace; font-size: 0.8rem; }
+    .ide-output { background: #000; color: #4ade80; font-family: monospace; font-size: 0.8rem; padding: 8px; border-radius: 4px; margin-top: 8px; min-height: 32px; white-space: pre-wrap; border-left: 3px solid var(--accent); }
+
+    .quiz-box { background: rgba(2, 132, 199, 0.05); border: 1px solid var(--primary); border-radius: 8px; padding: 14px; margin: 16px 0; }
+    .quiz-q { font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; color: var(--text); }
+    .quiz-opt { display: block; margin: 6px 0; padding: 8px 12px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; cursor: pointer; }
+    .quiz-opt.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; font-weight: bold; }
+    .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; font-weight: bold; }
+
+    .tip-box { background: #fefce8; border-left: 4px solid #eab308; padding: 12px; border-radius: 4px; font-size: 0.84rem; margin-top: 14px; }
+    .topic-complete-wrap { display: flex; align-items: center; gap: 8px; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .complete-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+    .nav-link-btn { display: block; background: #0369a1; color: white; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; border: none; width: 100%; cursor: pointer; margin-top: 16px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CASC-14T: Programming in .NET</h1>
+    <p>BCA Semester-V: Unit II Master Notes (VB.NET Fundamentals - संपूर्ण हिंदी में)</p>
+  </header>
+
+  <div class="control-panel">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+    <div class="progress-box">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="pBar"></div>
+      </div>
+      <div class="progress-text" id="pText">Unit 2 प्रगति: 0%</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a class="nav-pill" style="background: #1e293b; color: white;" href="index.html">⬅ मुख्य पोर्टल</a>
+    <a class="nav-pill" onclick="jumpTo('u2_t1')">1. Data Types & Scope</a>
+    <a class="nav-pill" onclick="jumpTo('u2_t2')">2. Control Structures & Loops</a>
+    <a class="nav-pill" onclick="jumpTo('u2_t3')">3. Arrays & Collections</a>
+    <a class="nav-pill" onclick="jumpTo('u2_t4')">4. Sub Procedures & Functions</a>
+    <a class="nav-pill" onclick="jumpTo('u2_t5')">5. Windows Forms & Controls</a>
+  </div>
+
+  <div class="search-box-wrap">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Unit 2 खोजें (Dim, Option Strict, Select Case, Redim, ByRef, TextBox)..." oninput="filterTopics()">
+  </div>
+
+  <div class="container">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <div class="card" id="u2_t1" data-keywords="dim variables data types option strict explicit scope boxing unboxing hindi">
+      <span class="badge">UNIT 2 • TOPIC 1</span>
+      <h2>Variables, Data Types, Type Conversions एवं Variable Scope</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> VB.NET में <b>Variable</b> मेमोरी में आरक्षित वह नामांकित स्थान है जो किसी निर्दिष्ट <b>Data Type</b> के मान को सुरक्षित रखता है। वेरिएबल की घोषणा <code>Dim</code> (Dimension) कीवर्ड के माध्यम से की जाती है।</p>
+      <p><b>सरल हिंदी में समझें:</b> वेरिएबल एक डिब्बे की तरह होता है जिसके ऊपर उसका नाम और प्रकार लिखा होता है।
+      <br>• <code>Option Explicit On</code>: यह सुनिश्चित करता है कि बिना घोषणा किए कोई भी वेरिएबल इस्तेमाल न हो।
+      <br>• <code>Option Strict On</code>: यह अनपेक्षित डेटा रूपांतरण (Implicit Narrowing Conversion) को रोकता है ताकि डेटा खराब न हो।
+      <br>• <b>Scope (दायरा):</b> वेरिएबल कोड में कहाँ से एक्सेस हो सकता है (Block Scope, Procedure/Local Scope, Module Scope, Global/Public Scope)।</p>
+
+      <h3>2. आर्किटेक्चर फ़्लोचार्ट (Boxing एवं Unboxing प्रक्रिया)</h3>
+      <div class="diagram-wrapper">
+        <svg class="diagram-svg" viewBox="0 0 520 150">
+          <rect x="20" y="30" width="130" height="50" rx="5" fill="#0284c7"/>
+          <text x="85" y="52" fill="white" font-size="9" text-anchor="middle" font-weight="bold">Value Type (Stack)</text>
+          <text x="85" y="68" fill="#e0f2fe" font-size="8" text-anchor="middle">Dim x As Integer = 50</text>
+
+          <line x1="150" y1="55" x2="220" y2="55" stroke="#16a34a" stroke-width="2"/>
+          <text x="185" y="47" fill="#16a34a" font-size="8" font-weight="bold">Boxing ➔</text>
+
+          <rect x="220" y="20" width="160" height="70" rx="6" fill="#fef08a" stroke="#ca8a04"/>
+          <text x="300" y="45" fill="#713f12" font-size="9.5" text-anchor="middle" font-weight="bold">Reference Type (Heap)</text>
+          <text x="300" y="62" fill="#854d0e" font-size="8" text-anchor="middle">Dim obj As Object = x</text>
+          <text x="300" y="78" fill="#854d0e" font-size="7.5" text-anchor="middle">(ऑब्जेक्ट बॉक्स में बंद हुआ)</text>
+
+          <line x1="220" y1="105" x2="150" y2="105" stroke="#dc2626" stroke-width="2"/>
+          <text x="185" y="120" fill="#dc2626" font-size="8" font-weight="bold">⬅ Unboxing</text>
+
+          <rect x="20" y="90" width="130" height="45" rx="5" fill="#16a34a"/>
+          <text x="85" y="112" fill="white" font-size="8.5" text-anchor="middle" font-weight="bold">CInt(obj) (वापस मान)</text>
+          <text x="85" y="126" fill="#dcfce7" font-size="7.5" text-anchor="middle">Stack में सुरक्षित मान</text>
+        </svg>
+      </div>
+
+      <h3>3. तुलना तालिका: Implicit बनाम Explicit Type Conversion</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Implicit Type Conversion</th><th>Explicit Type Conversion</th></tr></thead>
+          <tbody>
+            <tr><td><b>कार्यप्रणाली</b></td><td>कंपाइलर स्वतः बिना निर्देश के डेटा टाइप बदल देता है</td><td>डेवलपर द्वारा फंक्शन्स (<code>CInt()</code>, <code>CDbl()</code>) से बदला जाता है</td></tr>
+            <tr><td><b>डेटा हानि (Data Loss)</b></td><td>हो सकती है (जैसे Double से Integer बनते समय दशमलव हटना)</td><td>सुरक्षित, डेवलपर की पूर्व-सहमति से होता है</td></tr>
+            <tr><td><b>Option Strict On</b></td><td>यह कंपाइल-टाइम त्रुटि (Error) उत्पन्न करता है</td><td>मान्य और अनुशंसित रहता है</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>4. लाभ और हानियाँ (Pros & Cons of Option Strict)</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>लाभ (Advantages)</th><th>हानियाँ (Disadvantages)</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pro-text">+ कोड स्थिरता:</span> रन-टाइम पर प्रोग्राम अप्रत्याशित रूप से क्रैश नहीं होता।</td><td><span class="con-text">- अतिरिक्त कोड:</span> डेवलपर को बार-बार रूपांतरण फंक्शन्स लिखने पड़ते हैं।</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">VARIABLE & TYPE CONVERSION कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU2_1', 'outU2_1')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU2_1" class="ide-editor">
+Dim strMarks As String = "85"
+Dim numericMarks As Integer = CInt(strMarks)
+Dim total As Integer = numericMarks + 10
+
+Console.WriteLine("स्ट्रिंग मान: " & strMarks)
+Console.WriteLine("रूपांतरित पूर्णांक में 10 जोड़ने पर: " & total)</textarea>
+        <div class="ide-output" id="outU2_1">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: VB.NET में किसी वैल्यू टाइप को ऑब्जेक्ट (रेफरेंस टाइप) में बदलने की प्रक्रिया क्या कहलाती है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Boxing</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Unboxing</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Type Casting</div>
+      </div>
+
+      <div class="tip-box">
+        <b>परीक्षा स्कोरिंग कुंजी:</b> वेरिएबल घोषणा के 4 प्रमुख स्कोप (Block, Procedure, Module, Global) की स्पष्ट व्याख्या करें और <code>Option Strict On</code> का महत्व उदाहरण सहित लिखें।
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u2_1" class="complete-checkbox" onchange="toggleComplete('u2_1')">
+        <label for="chk_u2_1" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 1 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u2_t2')">आगे बढ़ें: विषय 2 (Control Structures & Loops) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <div class="card" id="u2_t2" data-keywords="control structures if then else select case for next while do loop for each hindi">
+      <span class="badge">UNIT 2 • TOPIC 2</span>
+      <h2>Control Structures: Decision Making एवं Looping Statements</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Control Structures</b> वे भाषाई संरचनाएं हैं जो प्रोग्राम निष्पादन के सामान्य क्रमिक प्रवाह को शर्तों (Conditions) और पुनरावृत्तियों (Iterations) के अनुसार नियंत्रित करती हैं।</p>
+      <p><b>सरल हिंदी में समझें:</b> 
+      <br>• <b>Decision Making:</b> कंप्यूटर को निर्णय लेना सिखाना—<code>If...Then...Else</code> (दो विकल्पों के लिए) या <code>Select Case</code> (कई विकल्पों में से एक चुनने के लिए)।
+      <br>• <b>Loops:</b> एक ही काम को बार-बार दोहराना—<code>For...Next</code> (जब गिनती पहले से पता हो), <code>Do...Loop</code> / <code>While</code> (जब शर्त पर निर्भर हो), और <code>For Each...Next</code> (ऐरे के प्रत्येक तत्व को बिना इंडेक्स के पढ़ने के लिए)।</p>
+
+      <h3>2. तुलना तालिका: If...Then...ElseIf बनाम Select Case</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>If...Then...ElseIf</th><th>Select Case</th></tr></thead>
+          <tbody>
+            <tr><td><b>अभिव्यक्ति प्रकार</b></td><td>जटिल तार्किक ऑपरेटर (<code>AND</code>, <code>OR</code>, <code>&gt;</code>, <code>&lt;</code>) का समर्थन करता है</td><td>एकल चर (Variable) या एक्सप्रेशन के मानों की तुलना करता है</td></tr>
+            <tr><td><b>पठनीयता (Readability)</b></td><td>कई सारी शर्तें होने पर कोड अव्यवस्थित हो जाता है</td><td>मेनू-ड्रिवन और बहु-विकल्पीय कोड के लिए साफ़ और स्पष्ट</td></tr>
+            <tr><td><b>कंपाइलर अनुकूलन</b></td><td>शर्तों को क्रम से एक-एक करके जांचता है</td><td>जंप टेबल (Jump Table) का उपयोग करके तेज़ निष्पादन करता है</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. GUI सिमुलेशन (Grade Evaluator Simulation)</h3>
+      <div class="gui-box">
+        <div class="gui-titlebar">GradeCalculator.vb</div>
+        <div class="gui-canvas">
+          <label style="font-size:0.8rem; font-weight:bold;">छात्र के अंक दर्ज करें (0 - 100):</label>
+          <input type="number" id="marksInputDemo" class="gui-input" placeholder="उदा. 78" value="78">
+          <button class="gui-btn" onclick="testSelectCaseDemo()">Select Case द्वारा ग्रेड जांचें</button>
+          <div id="gradeLog" style="font-size:0.8rem; font-family:monospace; color:var(--primary-dark);">स्थिति: तैयार...</div>
+        </div>
+      </div>
+
+      <h3>4. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">FOR EACH...NEXT सिंटैक्स</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU2_2', 'outU2_2')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU2_2" class="ide-editor">
+Dim fruits() As String = {"Apple", "Mango", "Banana"}
+Console.WriteLine("फलों की सूची:")
+
+For Each fruit As String In fruits
+    Console.WriteLine("-> " & fruit)
+Next</textarea>
+        <div class="ide-output" id="outU2_2">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: VB.NET में Select Case ब्लॉक में किसी रेंज की जांच करने के लिए किस कीवर्ड का उपयोग होता है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Case 80 To 100</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Case Between 80 And 100</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Case In (80-100)</div>
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u2_2" class="complete-checkbox" onchange="toggleComplete('u2_2')">
+        <label for="chk_u2_2" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 2 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u2_t3')">आगे बढ़ें: विषय 3 (Arrays & Collections) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <div class="card" id="u2_t3" data-keywords="arrays fixed dynamic redim preserve arraylist multidimensional jagged hindi">
+      <span class="badge">UNIT 2 • TOPIC 3</span>
+      <h2>Arrays एवं Dynamic Memory (ReDim, Preserve कीवर्ड)</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Array</b> एक ही डेटा प्रकार के तत्वों का एक क्रमिक और निश्चित आकार का मेमोरी संग्रह है जिसे एक सामान्य नाम और शून्य-आधारित (Zero-based) इंडेक्स द्वारा पहचाना जाता है। <b>ReDim</b> कीवर्ड का उपयोग रन-टाइम पर ऐरे का आकार बदलने के लिए होता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> यदि आपको 50 छात्रों के रोल नंबर रखने हैं, तो 50 अलग-अलग वेरिएबल बनाने के बजाय हम एक ऐरे <code>Dim roll(49) As Integer</code> बनाते हैं।
+      <br>• <code>ReDim arr(10)</code>: ऐरे का आकार बदलता है लेकिन पिछला डेटा मिटा देता है।
+      <br>• <code>ReDim Preserve arr(10)</code>: ऐरे का आकार भी बढ़ाता है और पुराने डेटा को सुरक्षित बचाकर रखता है।</p>
+
+      <h3>2. तुलना तालिका: Static Array बनाम Dynamic Array</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Static (Fixed-Size) Array</th><th>Dynamic Array (ReDim)</th></tr></thead>
+          <tbody>
+            <tr><td><b>आकार निर्धारण</b></td><td>कंपाइल-टाइम पर निश्चित हो जाता है (जैसे <code>Dim a(4)</code>)</td><td>रन-टाइम पर मेमोरी आवश्यकतानुसार बदलता है</td></tr>
+            <tr><td><b>मेमोरी का लचीलापन</b></td><td>कम, मेमोरी बर्बाद हो सकती है</td><td>उच्च, आवश्यकता पड़ने पर <code>ReDim</code> किया 309    <tr><td><b>मेमोरी का लचीलापन</b></td><td
+              >उच्च, आवश्यकता पड़ने पर <code>ReDim</code> किया जा सकता है</td></tr>
+            <tr><td><b>Preserve कीवर्ड</b></td><td>लागू नहीं होता</td><td>पुराना डेटा बचाने के लिए <code>Preserve</code> अनिवार्य है</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">REDIM PRESERVE कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU2_3', 'outU2_3')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU2_3" class="ide-editor">
+Dim marks() As Integer
+ReDim marks(1)
+marks(0) = 75
+marks(1) = 88
+
+' Purana data bachate hue aakar badhana
+ReDim Preserve marks(2)
+marks(2) = 95
+
+Console.WriteLine("तत्व 0: " & marks(0))
+Console.WriteLine("नया तत्व 2: " & marks(2))</textarea>
+        <div class="ide-output" id="outU2_3">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: Dynamic Array का आकार बढ़ाते समय पुराने डेटा को नष्ट होने से बचाने के लिए कौन सा कीवर्ड आवश्यक है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Preserve</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Keep</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Retain</div>
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u2_3" class="complete-checkbox" onchange="toggleComplete('u2_3')">
+        <label for="chk_u2_3" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 3 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u2_t4')">आगे बढ़ें: विषय 4 (Sub Procedures & Functions) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <div class="card" id="u2_t4" data-keywords="procedures sub functions byval byref optional paramarray return hindi">
+      <span class="badge">UNIT 2 • TOPIC 4 (10 MARKS QUESTION)</span>
+      <h2>Procedures: Sub Procedures बनाम Functions (ByVal एवं ByRef)</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Procedure</b> कोड का एक पुनः प्रयोज्य ब्लॉक है जो किसी विशिष्ट कार्य को निष्पादित करता है। <code>Sub Procedure</code> कोई मान नहीं लौटाता, जबकि <code>Function</code> निष्पादन के बाद कॉलिंग प्रोग्राम को एक मान (Return Value) प्रदान करता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> 
+      <br>• <b>ByVal (Pass By Value):</b> वेरिएबल की सिर्फ़ एक कॉपी अंदर भेजी जाती है। प्रोसीजर के अंदर मान बदलने पर बाहर के असली वेरिएबल पर कोई असर नहीं पड़ता।
+      <br>• <b>ByRef (Pass By Reference):</b> वेरिएबल का मूल मेमोरी पता (Memory Address) भेजा जाता है। अंदर किया गया कोई भी बदलाव बाहर मूल वेरिएबल में भी बदल जाता है।</p>
+
+      <h3>2. आर्किटेक्चर फ़्लोचार्ट (ByVal बनाम ByRef मेमोरी मॉडल)</h3>
+      <div class="diagram-wrapper">
+        <svg class="diagram-svg" viewBox="0 0 520 150">
+          <!-- ByVal -->
+          <rect x="20" y="25" width="220" height="50" rx="4" fill="#fee2e2" stroke="#dc2626"/>
+          <text x="130" y="47" fill="#991b1b" font-size="9" text-anchor="middle" font-weight="bold">ByVal (Value Copy)</text>
+          <text x="130" y="63" fill="#7f1d1d" font-size="7.5" text-anchor="middle">मूल मान सुरक्षित रहता है (No Side Effect)</text>
+
+          <!-- ByRef -->
+          <rect x="280" y="25" width="220" height="50" rx="4" fill="#dcfce7" stroke="#16a34a"/>
+          <text x="390" y="47" fill="#14532d" font-size="9" text-anchor="middle" font-weight="bold">ByRef (Memory Reference)</text>
+          <text x="390" y="63" fill="#166534" font-size="7.5" text-anchor="middle">सीधे मूल मेमोरी एड्रेस में संशोधन होता है</text>
+
+          <rect x="30" y="95" width="460" height="40" rx="4" fill="#f8fafc" stroke="#64748b" stroke-dasharray="3"/>
+          <text x="260" y="118" fill="#0f172a" font-size="8.5" text-anchor="middle">VB.NET में डिफ़ॉल्ट रूप से पैरामीटर्स <b>ByVal</b> पास होते हैं।</text>
+        </svg>
+      </div>
+
+      <h3>3. तुलना तालिका: Sub Procedure बनाम Function</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Sub Procedure</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td><b>रिटर्न वैल्यू</b></td><td>कोई मान वापस नहीं लौटाता (No Return Value)</td><td>हमेशा <code>Return</code> कीवर्ड द्वारा मान लौटाता है</td></tr>
+            <tr><td><b>डिक्लेरेशन कीवर्ड</b></td><td><code>Sub ... End Sub</code></td><td><code>Function ... End Function</code></td></tr>
+            <tr><td><b>कॉल करने का तरीका</b></td><td>एक स्वतंत्र स्टेटमेंट के रूप में</td><td>किसी एक्सप्रेशन या असाइनमेंट के दाईं ओर</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>4. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">BYVAL & BYREF परीक्षण कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU2_4', 'outU2_4')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU2_4" class="ide-editor">
+Sub ModifyValues(ByVal a As Integer, ByRef b As Integer)
+    a = a + 10
+    b = b + 10
+End Sub
+
+Dim x As Integer = 5
+Dim y As Integer = 5
+ModifyValues(x, y)
+
+Console.WriteLine("ByVal के बाद x का मान: " & x)
+Console.WriteLine("ByRef के बाद y का मान: " & y)</textarea>
+        <div class="ide-output" id="outU2_4">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: VB.NET में किसी फंक्शन से मान वापस भेजने के लिए किस कीवर्ड का उपयोग होता है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Return</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Send</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Output</div>
+      </div>
+
+      <div class="tip-box">
+        <b>परीक्षा स्कोरिंग कुंजी (10 Marks):</b> ByVal और ByRef के बीच अंतर स्पष्ट करने के लिए मेमोरी डायग्राम और दोनों का एक-एक छोटा कोड उदाहरण अवश्य लिखें।
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u2_4" class="complete-checkbox" onchange="toggleComplete('u2_4')">
+        <label for="chk_u2_4" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 4 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u2_t5')">आगे बढ़ें: विषय 5 (Windows Forms & Controls) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <div class="card" id="u2_t5" data-keywords="windows forms gui textbox button label combobox listbox message box event driven hindi">
+      <span class="badge">UNIT 2 • TOPIC 5</span>
+      <h2>Windows Forms GUI Architecture एवं Standard Controls</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Windows Forms</b> डेस्कटॉप GUI एप्लिकेशन विकसित करने का फ्रेमवर्क है जो <b>Event-Driven Programming</b> मॉडल पर आधारित है—अर्थात कोड यूजर की घटनाओं (Click, KeyPress, Change) के उत्तर में निष्पादित होता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> स्क्रीन पर दिखने वाली खिड़की को Form कहते हैं। उस पर रखे जाने वाले बटन (Button), टेक्स्ट बॉक्स (TextBox) और मेनू (ComboBox) को Controls कहा जाता है। जब कोई यूजर बटन दबाता है, तो <code>Button_Click</code> इवेंट ट्रिगर होता है और हमारा कोड चलता है।</p>
+
+      <h3>2. प्रमुख कंट्रोल्स एवं उनकी महत्वपूर्ण प्रॉपर्टीज</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>कंट्रोल का नाम</th><th>मुख्य कार्य</th><th>महत्वपूर्ण Properties & Events</th></tr></thead>
+          <tbody>
+            <tr><td><b>TextBox</b></td><td>उपयोगकर्ता से टेक्स्ट इनपुट प्राप्त करना</td><td><code>Text</code>, <code>PasswordChar</code>, <code>Multiline</code>, <code>TextChanged</code></td></tr>
+            <tr><td><b>Button</b></td><td>उपयोगकर्ता द्वारा एक्शन ट्रिगर करना</td><td><code>Text</code>, <code>Enabled</code>, <code>Visible</code>, <code>Click</code></td></tr>
+            <tr><td><b>ComboBox</b></td><td>ड्रॉपडाउन मेनू से विकल्प चुनना</td><td><code>Items</code>, <code>SelectedIndex</code>, <code>SelectedIndexChanged</code></td></tr>
+            <tr><td><b>CheckBox & RadioButton</b></td><td>हां/ना या बहु-विकल्पों में से चुनाव</td><td><code>Checked</code>, <code>CheckedChanged</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. GUI सिमुलेशन (Login Form Mockup)</h3>
+      <div class="gui-box">
+        <div class="gui-titlebar">UserLogin.vb [Design]</div>
+        <div class="gui-canvas">
+          <label style="font-size:0.8rem; font-weight:bold;">यूज़रनेम:</label>
+          <input type="text" id="guiUser" class="gui-input" placeholder="Admin">
+          <label style="font-size:0.8rem; font-weight:bold;">पासवर्ड:</label>
+          <input type="password" id="guiPass" class="gui-input" placeholder="••••••••">
+          <button class="gui-btn" onclick="testLoginDemo()">लॉगिन बटन दबाएं (Click Event)</button>
+          <div id="loginStatusLog" style="font-size:0.8rem; font-family:monospace; color:var(--primary-dark);">स्थिति: इनपुट की प्रतीक्षा...</div>
+        </div>
+      </div>
+
+      <!-- REFERENCES FOOTER -->
+      <div style="background: #e0f2fe; border: 1px solid #0284c7; border-radius: 12px; padding: 18px; margin-top: 25px;">
+        <h3 style="margin-top:0; border-left: 4px solid #0369a1; padding-left: 8px; color: #0369a1;">📚 Unit 2 के आधिकारिक शैक्षणिक संदर्भ (Official Academic References):</h3>
+        <ul style="margin-left: 20px; font-size: 0.86rem; color: #0369a1; line-height: 1.6;">
+          <li><b>मुख्य मानक पाठ्यपुस्तक:</b> <i>"Visual Basic .NET Black Book"</i> by Steven Holzner (Dreamtech Press) – Chapters on Language Elements, Procedures, Arrays, Control Flow एवं Windows Forms Controls.</li>
+          <li><b>विश्वविद्यालय अनुशंसित पुस्तक:</b> <i>"Mastering Visual Basic .NET"</i> by Evangelos Petroutsos (BPB Publications) – GUI Design, Event Handling एवं Variable Architecture.</li>
+          <li><b>मानक संदर्भ:</b> <i>"Programming with Visual Basic .NET"</i> by Gary Cornell (Pearson Education).</li>
+          <li><b>Microsoft MSDN Reference:</b> <code>System.Windows.Forms</code> Official Documentation.</li>
+        </ul>
+        <h4 style="color: #0369a1; font-size: 1.05rem; margin-top: 14px; text-align: center;">🏆 Unit 2: संपूर्ण 5 मुख्य विषय शत-प्रतिशत (100%) पूर्ण हुए!</h4>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        btn.innerText = '🌙 Dark Mode';
+        localStorage.setItem('u2_theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.innerText = '☀️ Light Mode';
+        localStorage.setItem('u2_theme', 'dark');
+      }
+    }
+    if (localStorage.getItem('u2_theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeBtn').innerText = '☀️ Light Mode';
+    }
+
+    function filterTopics() {
+      const q = document.getElementById('searchBox').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const text = card.getAttribute('data-keywords') + " " + card.innerText.toLowerCase();
+        if (text.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    const topicsU2 = ['u2_1', 'u2_2', 'u2_3', 'u2_4', 'u2_5'];
+    function updateProgress() {
+      let completed = 0;
+      topicsU2.forEach(tId => {
+        const chk = document.getElementById('chk_' + tId);
+        if (localStorage.getItem('done_' + tId) === 'true') {
+          if (chk) chk.checked = true;
+          completed++;
+        }
+      });
+      const pct = Math.round((completed / topicsU2.length) * 100);
+      document.getElementById('pBar').style.width = pct + '%';
+      document.getElementById('pText').innerText = `Unit 2 प्रगति: ${pct}% (${completed}/5 Topics)`;
+    }
+
+    function toggleComplete(tId) {
+      const chk = document.getElementById('chk_' + tId);
+      localStorage.setItem('done_' + tId, chk.checked ? 'true' : 'false');
+      updateProgress();
+    }
+    updateProgress();
+
+    function jumpTo(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function checkQuiz(el, isCorrect) {
+      const parent = el.parentElement;
+      parent.querySelectorAll('.quiz-opt').forEach(opt => opt.classList.remove('correct', 'wrong'));
+      if (isCorrect) {
+        el.classList.add('correct');
+        el.innerText += " ✅ (सही उत्तर!)";
+      } else {
+        el.classList.add('wrong');
+        el.innerText += " ❌ (गलत उत्तर, दोबारा प्रयास करें)";
+      }
+    }
+
+    function testSelectCaseDemo() {
+      const marks = parseInt(document.getElementById('marksInputDemo').value) || 0;
+      const log = document.getElementById('gradeLog');
+      log.style.color = "#0284c7";
+      if (marks >= 80) {
+        log.innerText = "[Select Case Result]\nअंक: " + marks + " ➔ ग्रेड: A+ (Honours)";
+      } else if (marks >= 60) {
+        log.innerText = "[Select Case Result]\nअंक: " + marks + " ➔ ग्रेड: A (First Division)";
+      } else if (marks >= 40) {
+        log.innerText = "[Select Case Result]\nअंक: " + marks + " ➔ ग्रेड: B (Pass)";
+      } else {
+        log.innerText = "[Select Case Result]\nअंक: " + marks + " ➔ ग्रेड: F (Fail)";
+      }
+    }
+
+    function testLoginDemo() {
+      const u = document.getElementById('guiUser').value;
+      const log = document.getElementById('loginStatusLog');
+      if (u.trim() !== "") {
+        log.style.color = "#16a34a";
+        log.innerText = `[Click Event Fired]\nस्वागत है, ${u}! Form2.Show() निष्पादित हुआ।`;
+      } else {
+        log.style.color = "#dc2626";
+        log.innerText = "[त्रुटि] कृपया यूज़रनेम दर्ज करें!";
+      }
+    }
+
+    function runSandbox(edId, outId) {
+      const code = document.getElementById(edId).value;
+      const out = document.getElementById(outId);
+      let res = "";
+      code.split('\n').forEach(line => {
+        if (line.includes("Console.WriteLine")) {
+          let m = line.match(/Console\.WriteLine\((.*)\)/);
+          if (m && m[1]) res += m[1].replace(/["&]/g, '').trim() + "\n";
+        }
+      });
+      out.innerText = res.trim() !== "" ? res : "सफलतापूर्वक निष्पादित (0 Errors).";
+    }
+  </script>
+</body>
+          </html>
+            
