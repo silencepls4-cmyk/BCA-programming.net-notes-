@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Sem-V: Unit 1 Master Notes - .NET Framework & CLR</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --code-bg: #0f172a;
+      --accent: #10b981;
+    }
+
+    [data-theme="dark"] {
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border: #374151;
+      --code-bg: #030712;
+      --accent: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.2s ease, color 0.2s ease; }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.65; padding-bottom: 70px; }
+
+    header { background: linear-gradient(135deg, #0369a1, #0284c7); color: white; padding: 22px 16px; text-align: center; }
+    header h1 { font-size: 1.35rem; font-weight: 800; }
+    header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+
+    .control-panel { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #334155; }
+    .theme-btn { background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
+    .progress-box { flex: 1; margin: 0 12px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.3s; }
+    .progress-text { font-size: 0.7rem; color: #94a3b8; font-weight: bold; margin-top: 2px; }
+
+    .topic-nav { display: flex; overflow-x: auto; background: var(--bg); padding: 8px 12px; gap: 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .nav-pill { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); padding: 5px 12px; border-radius: 16px; font-size: 0.78rem; text-decoration: none; cursor: pointer; font-weight: 600; }
+    .nav-pill:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .search-box-wrap { padding: 12px 14px; background: var(--bg); }
+    .search-input { width: 100%; max-width: 820px; margin: auto; display: block; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.88rem; background: var(--card-bg); color: var(--text); }
+    .search-input:focus { outline: 2px solid var(--primary); }
+
+    .container { max-width: 820px; margin: auto; padding: 0 14px; }
+
+    .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 28px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+    .card.hidden { display: none; }
+    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 14px; margin-bottom: 8px; }
+    
+    h2 { font-size: 1.25rem; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1.02rem; color: var(--text); margin: 18px 0 8px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
+    p { font-size: 0.92rem; color: var(--text); margin-bottom: 10px; }
+
+    .diagram-wrapper { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 12px; margin: 14px 0; text-align: center; }
+    .diagram-svg { width: 100%; max-width: 520px; height: auto; }
+
+    .table-container { overflow-x: auto; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+    th { background: rgba(0,0,0,0.04); font-weight: 700; }
+    .pro-text { color: #16a34a; font-weight: 600; }
+    .con-text { color: #dc2626; font-weight: 600; }
+
+    .gui-box { background: rgba(0,0,0,0.04); border: 2px solid var(--border); border-radius: 6px; padding: 12px; margin: 14px 0; }
+    .gui-titlebar { background: var(--primary-dark); color: white; padding: 5px 10px; font-size: 0.72rem; font-weight: bold; border-radius: 4px 4px 0 0; margin: -12px -12px 10px -12px; }
+    .gui-canvas { background: var(--card-bg); padding: 12px; border-radius: 4px; display: flex; flex-direction: column; gap: 8px; }
+    .gui-btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
+    .ide-box { background: var(--code-bg); border-radius: 8px; padding: 12px; margin: 14px 0; }
+    .ide-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .ide-title { color: #94a3b8; font-size: 0.72rem; font-weight: bold; }
+    .ide-run-btn { background: var(--accent); color: #022c22; font-weight: 700; border: none; padding: 5px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; }
+    .ide-editor { width: 100%; height: 115px; background: #020617; color: #38bdf8; border: 1px solid #334155; border-radius: 6px; padding: 8px; font-family: monospace; font-size: 0.8rem; }
+    .ide-output { background: #000; color: #4ade80; font-family: monospace; font-size: 0.8rem; padding: 8px; border-radius: 4px; margin-top: 8px; min-height: 32px; white-space: pre-wrap; border-left: 3px solid var(--accent); }
+
+    .quiz-box { background: rgba(2, 132, 199, 0.05); border: 1px solid var(--primary); border-radius: 8px; padding: 14px; margin: 16px 0; }
+    .quiz-q { font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; color: var(--text); }
+    .quiz-opt { display: block; margin: 6px 0; padding: 8px 12px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; cursor: pointer; }
+    .quiz-opt.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; font-weight: bold; }
+    .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; font-weight: bold; }
+
+    .tip-box { background: #fefce8; border-left: 4px solid #eab308; padding: 12px; border-radius: 4px; font-size: 0.84rem; margin-top: 14px; }
+    .topic-complete-wrap { display: flex; align-items: center; gap: 8px; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .complete-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+    .nav-link-btn { display: block; background: #0369a1; color: white; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; border: none; width: 100%; cursor: pointer; margin-top: 16px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CASC-14T: Programming in .NET</h1>
+    <p>BCA Semester-V: Unit I Master Notes (.NET Framework & CLR - संपूर्ण हिंदी में)</p>
+  </header>
+
+  <div class="control-panel">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+    <div class="progress-box">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="pBar"></div>
+      </div>
+      <div class="progress-text" id="pText">Unit 1 प्रगति: 0%</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a class="nav-pill" style="background: #1e293b; color: white;" href="index.html">⬅ मुख्य पोर्टल</a>
+    <a class="nav-pill" onclick="jumpTo('u1_t1')">1. .NET Architecture & CLR</a>
+    <a class="nav-pill" onclick="jumpTo('u1_t2')">2. CTS, CLS & MSIL</a>
+    <a class="nav-pill" onclick="jumpTo('u1_t3')">3. JIT Compilers</a>
+    <a class="nav-pill" onclick="jumpTo('u1_t4')">4. Assemblies, Metadata & GAC</a>
+  </div>
+
+  <div class="search-box-wrap">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Unit 1 खोजें (CLR, MSIL, JIT, CTS, CLS, Assembly, GAC)..." oninput="filterTopics()">
+  </div>
+
+  <div class="container">
+
+    <!-- TOPIC 1 -->
+    <div class="card" id="u1_t1" data-keywords="clr architecture common language runtime managed code garbage collector memory hindi">
+      <span class="badge">UNIT 1 • TOPIC 1</span>
+      <h2>.NET Framework आर्किटेक्चर एवं Common Language Runtime (CLR)</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Common Language Runtime (CLR)</b> .NET फ्रेमवर्क का वर्चुअल मशीन इंजन (Execution Engine) है, जो मैनेज्ड कोड (Managed Code) के निष्पादन, मेमोरी प्रबंधन, गार्बेज कलेक्शन, थ्रेडिंग और सुरक्षा का प्रबंधन करता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> CLR .NET का "हार्ट (दिल)" या ऑपरेटिंग सिस्टम की तरह है। जब आप VB.NET या C# में कोड लिखते हैं, तो कंप्यूटर का हार्डवेयर उसे सीधे नहीं चलाता। CLR बीच में बैठकर कोड को चलाता है, मेमोरी को साफ (Garbage Collection) करता है और यह सुनिश्चित करता है कि सॉफ्टवेयर क्रैश न हो।</p>
+
+      <h3>2. आर्किटेक्चर फ़्लोचार्ट (CLR Execution Model)</h3>
+      <div class="diagram-wrapper">
+        <svg class="diagram-svg" viewBox="0 0 520 160">
+          <rect x="20" y="20" width="120" height="45" rx="5" fill="#0284c7"/>
+          <text x="80" y="46" fill="white" font-size="9" text-anchor="middle" font-weight="bold">Source Code (VB.NET)</text>
+
+          <line x1="140" y1="42" x2="190" y2="42" stroke="#475569" stroke-width="2"/>
+
+          <rect x="190" y="20" width="130" height="45" rx="5" fill="#ca8a04"/>
+          <text x="255" y="38" fill="white" font-size="8.5" text-anchor="middle" font-weight="bold">Language Compiler</text>
+          <text x="255" y="52" fill="#fef08a" font-size="7.5" text-anchor="middle">MSIL / IL Code बनाता है</text>
+
+          <line x1="320" y1="42" x2="370" y2="42" stroke="#475569" stroke-width="2"/>
+
+          <rect x="370" y="15" width="130" height="55" rx="5" fill="#16a34a"/>
+          <text x="435" y="35" fill="white" font-size="9" text-anchor="middle" font-weight="bold">CLR (JIT Compiler)</text>
+          <text x="435" y="50" fill="#dcfce7" font-size="7.5" text-anchor="middle">Native Machine Code</text>
+
+          <rect x="30" y="95" width="460" height="45" rx="4" fill="#f8fafc" stroke="#64748b" stroke-dasharray="3"/>
+          <text x="260" y="115" fill="#0f172a" font-size="8.5" text-anchor="middle" font-weight="bold">CLR के मुख्य घटक: Memory Management, Threading, Security, Type-Safety</text>
+          <text x="260" y="130" fill="#475569" font-size="8" text-anchor="middle">Garbage Collector अप्रयुक्त मेमोरी को स्वचालित रूप से मुक्त करता है।</text>
+        </svg>
+      </div>
+
+      <h3>3. तुलना तालिका: Managed Code बनाम Unmanaged Code</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Managed Code (.NET)</th><th>Unmanaged Code (C/C++)</th></tr></thead>
+          <tbody>
+            <tr><td><b>निष्पादन वातावरण</b></td><td>CLR के नियंत्रण में निष्पादित होता है</td><td>सीधे ऑपरेटिंग सिस्टम द्वारा निष्पादित होता है</td></tr>
+            <tr><td><b>मेमोरी प्रबंधन</b></td><td>स्वचालित (Garbage Collector द्वारा)</td><td>मैन्युअल (malloc/free, new/delete द्वारा)</td></tr>
+            <tr><td><b>सुरक्षा एवं बफ़र ओवरफ्लो</b></td><td>उच्च (Type-Safe वातावरण)</td><td>कमज़ोर (मेमोरी लीक का खतरा अधिक)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>4. लाइव सिमुलेशन (CLR Garbage Collector)</h3>
+      <div class="gui-box">
+        <div class="gui-titlebar">GarbageCollectorDemo.vb</div>
+        <div class="gui-canvas">
+          <button class="gui-btn" onclick="testGCDemo()">GC.Collect() चलाएं (मेमोरी साफ़ करें)</button>
+          <div id="gcLog" style="font-size:0.8rem; font-family:monospace; color:var(--primary-dark);">स्थिति: मेमोरी सामान्य है...</div>
+        </div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: .NET फ्रेमवर्क में अप्रयुक्त ऑब्जेक्ट्स को मेमोरी से हटाने की स्वचालित प्रक्रिया क्या कहलाती है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Garbage Collection</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Memory Paging</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Defragmentation</div>
+      </div>
+
+      <div class="tip-box">
+        <b>परीक्षा स्कोरिंग कुंजी (10 Marks):</b> CLR आर्किटेक्चर पर प्रश्न आने पर CLR के मुख्य घटक (JIT Compiler, Garbage Collector, Class Loader, Security Engine) अवश्य लिखें।
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u1_1" class="complete-checkbox" onchange="toggleComplete('u1_1')">
+        <label for="chk_u1_1" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 1 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u1_t2')">आगे बढ़ें: विषय 2 (CTS, CLS & MSIL) ➔</button>
+    </div>
+
+
+    <!-- TOPIC 2 -->
+    <div class="card" id="u1_t2" data-keywords="cts common type system cls common language specification msil il intermediate hindi">
+      <span class="badge">UNIT 1 • TOPIC 2</span>
+      <h2>CTS (Common Type System), CLS एवं MSIL / CIL</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>CTS (Common Type System):</b> नियमों का वह समूह जो यह तय करता है कि .NET में सभी भाषाएं डेटा प्रकारों (Data Types) को एक ही समान कैसे घोषित और उपयोग करेंगी (जैसे VB.NET का <code>Integer</code> और C# का <code>int</code> दोनों आंतरिक रूप से <code>System.Int32</code> हैं)।</p>
+      <p><b>CLS (Common Language Specification):</b> न्यूनतम बुनियादी दिशा-निर्देशों का सेट, जो सभी .NET भाषाओं में क्रॉस-लैंग्वेज इंटरऑपरेबिलिटी (Language Interoperability) सुनिश्चित करता है।</p>
+      <p><b>MSIL / CIL (Microsoft Intermediate Language):</b> सीपीयू-स्वतंत्र मध्यवर्ती बाइटकोड, जिसे .NET कंपाइलर स्रोत कोड को कंपाइल करने के बाद तैयार करता है।</p>
+
+      <h3>2. तुलना तालिका: CTS बनाम CLS</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>CTS (Common Type System)</th><th>CLS (Common Language Specification)</th></tr></thead>
+          <tbody>
+            <tr><td><b>दायरा</b></td><td>सभी डेटा टाइप्स और ऑब्जेक्ट नियमों का विस्तृत सुपरसेट</td><td>CTS का एक छोटा सब-सेट (Subset)</td></tr>
+            <tr><td><b>उद्देश्य</b></td><td>डेटा प्रकारों की एकरूपता और टाइप-सेफ्टी</td><td>विभिन्न भाषाओं के बीच निर्बाध बातचीत सुनिश्चित करना</td></tr>
+            <tr><td><b>केस-सेंसिटिविटी</b></td><td>केस-सेंसिटिव नियमों को अनुमति दे सकता है</td><td>केस-इंसेंसिटिव कोड की सिफारिश करता है ताकि VB.NET भी समझ सके</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: .NET कंपाइलर द्वारा सोर्स कोड को कंपाइल करने के बाद कौन सा मध्यवर्ती कोड उत्पन्न होता है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) MSIL (Microsoft Intermediate Language)</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Native Assembly Code</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Java Bytecode</div>
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u1_2" class="complete-checkbox" onchange="toggleComplete('u1_2')">
+        <label for="chk_u1_2" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 2 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u1_t3')">आगे बढ़ें: विषय 3 (JIT Compilers) ➔</button>
+    </div>
+
+
+    <!-- TOPIC 3 -->
+    <div class="card" id="u1_t3" data-keywords="jit just in time compiler pre-jit echno-jit normal jit native code compilation hindi">
+      <span class="badge">UNIT 1 • TOPIC 3</span>
+      <h2>JIT (Just-In-Time) Compilers के प्रकार</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Just-In-Time (JIT) Compiler</b> CLR का वह आंतरिक घटक है जो निष्पादन के समय (Runtime) MSIL कोड को विशिष्ट सीपीयू के नेटिव मशीन कोड (Native Machine Code) में परिवर्तित करता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> JIT एक ऑन-डिमांड ट्रांसलेटर है। यह पूरे सॉफ्टवेयर को एक साथ मशीन कोड में नहीं बदलता, बल्कि जिस मेथड या फंक्शन को यूजर कॉल करता है, सिर्फ़ उसी हिस्से को तुरंत मशीन कोड में बदलकर रैम में रख लेता है ताकि दोबारा कॉल होने पर सुपरफास्ट चले।</p>
+
+      <h3>2. JIT Compilers के तीन प्रमुख प्रकार</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>JIT का प्रकार</th><th>कार्यप्रणाली</th><th>उपयोग</th></tr></thead>
+          <tbody>
+            <tr><td><b>Pre-JIT</b></td><td>पूरे एप्लिकेशन को निष्पादन से पहले ही मशीन कोड में बदल देता है (NGen.exe टूल द्वारा)।</td><td>बड़ी एंटरप्राइज एप्लिकेशन्स का स्टार्टअप समय सुधारने के लिए।</td></tr>
+            <tr><td><b>Normal JIT</b></td><td>मेथड्स को पहली बार कॉल किए जाने पर कंपाइल करता है और मेमोरी कैशे में सहेजता है (Default)।</td><td>मानक .NET एप्लिकेशन्स में।</td></tr>
+            <tr><td><b>Econo-JIT</b></td><td>कोड को तुरंत कंपाइल करता है लेकिन कैशे में सेव नहीं करता (मेमोरी खाली रखता है)।</td><td>सीमित रैम वाले पुराने मोबाइल/एम्बेडेड डिवाइसेज के लिए।</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: .NET में डिफ़ॉल्ट JIT कंपाइलर कौन सा होता है जो मेथड कॉल होने पर उसे कंपाइल करके कैशे में रखता है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Normal JIT</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) Econo JIT</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Pre-JIT</div>
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u1_3" class="complete-checkbox" onchange="toggleComplete('u1_3')">
+        <label for="chk_u1_3" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 3 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u1_t4')">आगे बढ़ें: विषय 4 (Assemblies & GAC) ➔</button>
+    </div>
+
+
+    <!-- TOPIC 4 -->
+    <div class="card" id="u1_t4" data-keywords="assembly gac global assembly cache private shared manifest metadata snk dll exe hindi">
+      <span class="badge">UNIT 1 • TOPIC 4</span>
+      <h2>Assemblies, Metadata, Manifest एवं GAC (Global Assembly Cache)</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>Assembly</b> .NET एप्लिकेशन का प्राथमिक परिनियोजन (Deployment) और सुरक्षा ब्लॉक है (<code>.dll</code> या <code>.exe</code> फ़ाइल)। इसमें MSIL कोड, टाइप मेटाडेटा और मैनिफ़ेस्ट (Manifest) शामिल होता है।</p>
+      <p><b>Global Assembly Cache (GAC):</b> मशीन-स्तरीय केंद्रीय फ़ोल्डर जहां शेयर्ड (Shared) असेंबलीज़ को स्ट्रॉन्ग नेम (Strong Name - SNK) के साथ इंस्टॉल किया जाता है ताकि कंप्यूटर की सभी एप्लिकेशन्स उन्हें साझा कर सकें।</p>
+
+      <h3>2. तुलना तालिका: Private Assembly बनाम Shared Assembly</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Private Assembly</th><th>Shared Assembly</th></tr></thead>
+          <tbody>
+            <tr><td><b>स्टोरेज लोकेशन</b></td><td>एप्लिकेशन के अपने बिन (Bin) फ़ोल्डर में</td><td>केंद्रीय GAC फ़ोल्डर में (<code>C:\Windows\Assembly</code>)</td></tr>
+            <tr><td><b>स्ट्रॉन्ग नेम (Strong Name)</b></td><td>आवश्यक नहीं</td><td>अनिवार्य (क्रिप्टोग्राफ़िक कुंजी + वर्ज़न)</td></tr>
+            <tr><td><b>उपयोगिता</b></td><td>केवल एक विशिष्ट सॉफ़्टवेयर के लिए</td><td>सिस्टम के कई सॉफ़्टवेयर द्वारा साझा</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- REFERENCES FOOTER -->
+      <div style="background: #e0f2fe; border: 1px solid #0284c7; border-radius: 12px; padding: 18px; margin-top: 25px;">
+        <h3 style="margin-top:0; border-left: 4px solid #0369a1; padding-left: 8px; color: #0369a1;">📚 Unit 1 के संपूर्ण शैक्षणिक संदर्भ (Official Academic References):</h3
+                                                                                                                                                                  301    <div style="background: #e0f2fe; b
+302      <h3 style="margin-top:0; border-
+303
+                                                                                                                                                                                 <div style="background: #e0f2fe; border: 1px solid #0284c7; border-radius: 12px; padding: 18px; margin-top: 25px;">
+        <h3 style="margin-top:0; border-left: 4px solid #0369a1; padding-left: 8px; color: #0369a1;">📚 Unit 1 ke sampoorn shaekshanik sandarbh (Official Academic References):</h3>
+        <ul style="margin-left: 20px; font-size: 0.86rem; color: #0369a1; line-height: 1.6;">
+          <li><b>Mukhya manak pathyapustak:</b> <i>"Visual Basic .NET Black Book"</i> by Steven Holzner (Dreamtech Press) – Chapters on .NET Architecture, CLR, JIT Compilers evan Assemblies.</li>
+          <li><b>Vishwavidyalaya anushansit pustak:</b> <i>"CLR via C#"</i> by Jeffrey Richter (Microsoft Press) – Deep CLR Internals, Memory Management evan Garbage Collection.</li>
+          <li><b>Manak guide:</b> <i>"Programming with Visual Basic .NET"</i> by Gary Cornell (Pearson Education).</li>
+        </ul>
+        <h4 style="color: #0369a1; font-size: 1.05rem; margin-top: 14px; text-align: center;">🏆 Unit 1: Sampoorn 4 vishay shat-pratishat (100%) poorn hue!</h4>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        btn.innerText = '🌙 Dark Mode';
+        localStorage.setItem('u1_theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.innerText = '☀️ Light Mode';
+        localStorage.setItem('u1_theme', 'dark');
+      }
+    }
+    if (localStorage.getItem('u1_theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeBtn').innerText = '☀️ Light Mode';
+    }
+
+    function filterTopics() {
+      const q = document.getElementById('searchBox').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const text = card.getAttribute('data-keywords') + " " + card.innerText.toLowerCase();
+        if (text.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    const topicsU1 = ['u1_1', 'u1_2', 'u1_3', 'u1_4'];
+    function updateProgress() {
+      let completed = 0;
+      topicsU1.forEach(tId => {
+        const chk = document.getElementById('chk_' + tId);
+        if (localStorage.getItem('done_' + tId) === 'true') {
+          if (chk) chk.checked = true;
+          completed++;
+        }
+      });
+      const pct = Math.round((completed / topicsU1.length) * 100);
+      document.getElementById('pBar').style.width = pct + '%';
+      document.getElementById('pText').innerText = `Unit 1 pragati: ${pct}% (${completed}/4 Topics)`;
+    }
+
+    function toggleComplete(tId) {
+      const chk = document.getElementById('chk_' + tId);
+      localStorage.setItem('done_' + tId, chk.checked ? 'true' : 'false');
+      updateProgress();
+    }
+    updateProgress();
+
+    function jumpTo(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function checkQuiz(el, isCorrect) {
+      const parent = el.parentElement;
+      parent.querySelectorAll('.quiz-opt').forEach(opt => opt.classList.remove('correct', 'wrong'));
+      if (isCorrect) {
+        el.classList.add('correct');
+        el.innerText += " ✅ (Sahi uttar!)";
+      } else {
+        el.classList.add('wrong');
+        el.innerText += " ❌ (Galat uttar, dobara prayas karein)";
+      }
+    }
+
+    function testGCDemo() {
+      const log = document.getElementById('gcLog');
+      log.style.color = "#16a34a";
+      log.innerText = "[GC.Collect() nishpadit]\nGeneration 0, 1 aur 2 ke sabhi aprayukt objects memory se saaf kar diye gaye!\nMemory leak ka jokhim: 0%";
+    }
+  </script>
+</body>
+  </html>
+
+                                                                                                                                                                  
+                                                                                                                                                                  
+                                                                                                                                                                  
+                                                                                                                                                                  
+                                                                                                                                                                  
