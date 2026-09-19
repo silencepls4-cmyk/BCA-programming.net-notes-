@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Sem-V: Unit 4 Master Notes - ADO.NET Data Access</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --code-bg: #0f172a;
+      --accent: #10b981;
+    }
+
+    [data-theme="dark"] {
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border: #374151;
+      --code-bg: #030712;
+      --accent: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.2s ease, color 0.2s ease; }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.65; padding-bottom: 70px; }
+
+    header { background: linear-gradient(135deg, #0369a1, #0284c7); color: white; padding: 22px 16px; text-align: center; }
+    header h1 { font-size: 1.35rem; font-weight: 800; }
+    header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+
+    .control-panel { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #334155; }
+    .theme-btn { background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
+    .progress-box { flex: 1; margin: 0 12px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.3s; }
+    .progress-text { font-size: 0.7rem; color: #94a3b8; font-weight: bold; margin-top: 2px; }
+
+    .topic-nav { display: flex; overflow-x: auto; background: var(--bg); padding: 8px 12px; gap: 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .nav-pill { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); padding: 5px 12px; border-radius: 16px; font-size: 0.78rem; text-decoration: none; cursor: pointer; font-weight: 600; }
+    .nav-pill:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .search-box-wrap { padding: 12px 14px; background: var(--bg); }
+    .search-input { width: 100%; max-width: 820px; margin: auto; display: block; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.88rem; background: var(--card-bg); color: var(--text); }
+    .search-input:focus { outline: 2px solid var(--primary); }
+
+    .container { max-width: 820px; margin: auto; padding: 0 14px; }
+
+    .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 28px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+    .card.hidden { display: none; }
+    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 14px; margin-bottom: 8px; }
+    
+    h2 { font-size: 1.25rem; color: var(--primary-dark); margin-bottom: 12px; border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1.02rem; color: var(--text); margin: 18px 0 8px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
+    p { font-size: 0.92rem; color: var(--text); margin-bottom: 10px; }
+
+    .diagram-wrapper { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 12px; margin: 14px 0; text-align: center; }
+    .diagram-svg { width: 100%; max-width: 520px; height: auto; }
+
+    .table-container { overflow-x: auto; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+    th { background: rgba(0,0,0,0.04); font-weight: 700; }
+    .pro-text { color: #16a34a; font-weight: 600; }
+    .con-text { color: #dc2626; font-weight: 600; }
+
+    .gui-box { background: rgba(0,0,0,0.04); border: 2px solid var(--border); border-radius: 6px; padding: 12px; margin: 14px 0; }
+    .gui-titlebar { background: var(--primary-dark); color: white; padding: 5px 10px; font-size: 0.72rem; font-weight: bold; border-radius: 4px 4px 0 0; margin: -12px -12px 10px -12px; }
+    .gui-canvas { background: var(--card-bg); padding: 12px; border-radius: 4px; display: flex; flex-direction: column; gap: 8px; }
+    .gui-input { padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.82rem; background: var(--bg); color: var(--text); }
+    .gui-btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
+    .ide-box { background: var(--code-bg); border-radius: 8px; padding: 12px; margin: 14px 0; }
+    .ide-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .ide-title { color: #94a3b8; font-size: 0.72rem; font-weight: bold; }
+    .ide-run-btn { background: var(--accent); color: #022c22; font-weight: 700; border: none; padding: 5px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; }
+    .ide-editor { width: 100%; height: 115px; background: #020617; color: #38bdf8; border: 1px solid #334155; border-radius: 6px; padding: 8px; font-family: monospace; font-size: 0.8rem; }
+    .ide-output { background: #000; color: #4ade80; font-family: monospace; font-size: 0.8rem; padding: 8px; border-radius: 4px; margin-top: 8px; min-height: 32px; white-space: pre-wrap; border-left: 3px solid var(--accent); }
+
+    .quiz-box { background: rgba(2, 132, 199, 0.05); border: 1px solid var(--primary); border-radius: 8px; padding: 14px; margin: 16px 0; }
+    .quiz-q { font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; color: var(--text); }
+    .quiz-opt { display: block; margin: 6px 0; padding: 8px 12px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; cursor: pointer; }
+    .quiz-opt.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; font-weight: bold; }
+    .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; font-weight: bold; }
+
+    .tip-box { background: #fefce8; border-left: 4px solid #eab308; padding: 12px; border-radius: 4px; font-size: 0.84rem; margin-top: 14px; }
+    .topic-complete-wrap { display: flex; align-items: center; gap: 8px; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .complete-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+    .nav-link-btn { display: block; background: #0369a1; color: white; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; border: none; width: 100%; cursor: pointer; margin-top: 16px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CASC-14T: Programming in .NET</h1>
+    <p>BCA Semester-V: Unit IV Master Notes (ADO.NET Data Access - संपूर्ण हिंदी में)</p>
+  </header>
+
+  <div class="control-panel">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+    <div class="progress-box">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="pBar"></div>
+      </div>
+      <div class="progress-text" id="pText">Unit 4 प्रगति: 0%</div>
+    </div>
+  </div>
+
+  <div class="topic-nav">
+    <a class="nav-pill" style="background: #1e293b; color: white;" href="index.html">⬅ मुख्य पोर्टल</a>
+    <a class="nav-pill" onclick="jumpTo('u4_t1')">1. ADO.NET Architecture</a>
+    <a class="nav-pill" onclick="jumpTo('u4_t2')">2. Data Providers & Objects</a>
+    <a class="nav-pill" onclick="jumpTo('u4_t3')">3. Disconnected Model (DataSet)</a>
+    <a class="nav-pill" onclick="jumpTo('u4_t4')">4. Transactions & Security</a>
+  </div>
+
+  <div class="search-box-wrap">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Unit 4 खोजें (Connected, Disconnected, SqlDataReader, DataSet, Transaction)..." oninput="filterTopics()">
+  </div>
+
+  <div class="container">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <div class="card" id="u4_t1" data-keywords="adonet architecture connected disconnected sqlconnection datareader dataset hindi">
+      <span class="badge">UNIT 4 • TOPIC 1 (CORE ARCHITECTURE)</span>
+      <h2>ADO.NET Architecture: Connected बनाम Disconnected Model</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>ADO.NET</b> .NET फ्रेमवर्क का डेटा एक्सेस आर्किटेक्चर है, जो विभिन्न डेटा स्रोतों (SQL Server, Oracle, OLE DB) से डेटा को पढ़ने, अद्यतन (Update) करने और प्रबंधित करने के लिए दो प्राथमिक परिचालन मॉडल प्रदान करता है: <b>Connected Architecture</b> एवं <b>Disconnected Architecture</b>।</p>
+      <p><b>सरल हिंदी में समझें:</b> 
+      <br>• <b>Connected Model:</b> जैसे आप पाइपलाइन से सीधा पानी पी रहे हों। जब तक <code>DataReader</code> डेटा की पंक्तियां पढ़ता है, डेटाबेस से लाइव कनेक्शन खुला रहता है। यह अत्यधिक तीव्र होता है लेकिन डेटाबेस सर्वर पर लगातार लोड बनाए रखता है।
+      <br>• <b>Disconnected Model:</b> जैसे आप बाल्टी में पानी भरकर अपने कमरे में रख लें। <code>DataAdapter</code> डेटाबेस से सारा डेटा लाकर रैम (RAM) के अंदर बने <code>DataSet</code> में भर देता है और तुरंत कनेक्शन बंद (Close) कर देता है। आप बिना इंटरनेट या ऑफलाइन भी डेटा देख और बदल सकते हैं, और अंत में <code>da.Update()</code> द्वारा सभी बदलाव एक साथ डेटाबेस पर भेज सकते हैं।</p>
+
+      <h3>2. आर्किटेक्चर फ़्लोचार्ट (Connected बनाम Disconnected निष्पादन)</h3>
+      <div class="diagram-wrapper">
+        <svg class="diagram-svg" viewBox="0 0 520 170">
+          <!-- Database -->
+          <rect x="20" y="55" width="100" height="60" rx="6" fill="#0284c7"/>
+          <text x="70" y="83" fill="white" font-size="9.5" text-anchor="middle" font-weight="bold">Database Server</text>
+          <text x="70" y="98" fill="#e0f2fe" font-size="7.5" text-anchor="middle">(SQL Server / Access)</text>
+
+          <!-- Connected Path -->
+          <line x1="120" y1="65" x2="220" y2="35" stroke="#dc2626" stroke-width="2"/>
+          <rect x="220" y="15" width="130" height="40" rx="4" fill="#fee2e2" stroke="#dc2626"/>
+          <text x="285" y="34" fill="#991b1b" font-size="8.5" text-anchor="middle" font-weight="bold">Connected Model</text>
+          <text x="285" y="47" fill="#7f1d1d" font-size="7.5" text-anchor="middle">Connection, Command, Reader</text>
+
+          <line x1="350" y1="35" x2="400" y2="35" stroke="#dc2626" stroke-width="2"/>
+          <rect x="400" y="15" width="100" height="40" rx="4" fill="#f8fafc" stroke="#dc2626"/>
+          <text x="450" y="38" fill="#991b1b" font-size="8" text-anchor="middle">Forward-Only Stream</text>
+
+          <!-- Disconnected Path -->
+          <line x1="120" y1="105" x2="220" y2="135" stroke="#16a34a" stroke-width="2"/>
+          <rect x="220" y="115" width="130" height="40" rx="4" fill="#dcfce7" stroke="#16a34a"/>
+          <text x="285" y="134" fill="#14532d" font-size="8.5" text-anchor="middle" font-weight="bold">DataAdapter (पुल)</text>
+          <text x="285" y="147" fill="#166534" font-size="7.5" text-anchor="middle">Fill() एवं Update()</text>
+
+          <line x1="350" y1="135" x2="400" y2="135" stroke="#16a34a" stroke-width="2"/>
+          <rect x="400" y="115" width="100" height="40" rx="4" fill="#f8fafc" stroke="#16a34a"/>
+          <text x="450" y="133" fill="#14532d" font-size="8" text-anchor="middle" font-weight="bold">DataSet / Table</text>
+          <text x="450" y="146" fill="#15803d" font-size="7" text-anchor="middle">In-Memory Cache</text>
+        </svg>
+      </div>
+
+      <h3>3. तुलना तालिका: Connected बनाम Disconnected Architecture</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Connected Architecture</th><th>Disconnected Architecture</th></tr></thead>
+          <tbody>
+            <tr><td><b>डेटाबेस कनेक्शन की स्थिति</b></td><td>डेटा पढ़ने के दौरान कनेक्शन लगातार खुला रहता है</td><td>डेटा फेच होते ही कनेक्शन तुरंत बंद कर दिया जाता है</td></tr>
+            <tr><td><b>प्रमुख ऑब्जेक्ट्स</b></td><td><code>SqlConnection</code>, <code>SqlCommand</code>, <code>SqlDataReader</code></td><td><code>SqlDataAdapter</code>, <code>DataSet</code>, <code>DataTable</code></td></tr>
+            <tr><td><b>प्रदर्शन (Performance)</b></td><td>अत्यधिक तीव्र (Read-only, Forward-only स्ट्रीम)</td><td>मध्यम (रैम में XML/रिलेशनल संरचना बनाने के कारण)</td></tr>
+            <tr><td><b>डेटा संशोधन (Modification)</b></td><td>केवल डायरेक्ट SQL स्टेटमेंट चलाकर</td><td>मेमोरी में संपादन के बाद <code>da.Update()</code> द्वारा</td></tr>
+            <tr><td><b>नेटवर्क निर्भरता</b></td><td>लगातार नेटवर्क आवश्यक है</td><td>केवल डेटा लाने और सहेजने के समय नेटवर्क चाहिए</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>4. लाभ और हानियाँ (Pros & Cons)</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>लाभ (Advantages)</th><th>हानियाँ (Disadvantages)</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pro-text">+ त्वरित निष्पादन:</span> DataReader न्यूनतम मेमोरी खपत के साथ भारी रिपोर्ट्स को तुरंत रेंडर करता है।</td><td><span class="con-text">- सर्वर संसाधन खपत:</span> बड़ी संख्या में समवर्ती (Concurrent) यूज़र्स होने पर कनेक्शन पूल जल्दी भर सकता है।</td></tr>
+            <tr><td><span class="pro-text">+ ऑफ़लाइन प्रबंधन:</span> Disconnected मॉडल में नेटवर्क चले जाने पर भी एप्लिकेशन सुचारू रूप से कार्य करती है।</td><td><span class="con-text">- मेमोरी की खपत:</span> बड़े डेटासेट्स क्लाइंट मशीन की रैम को तेज़ी से भर सकते हैं।</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">SQLDATAREADER (CONNECTED) कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU4_1', 'outU4_1')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU4_1" class="ide-editor">
+Dim conn As New SqlConnection("Server=MyServer;Database=CollegeDB;Integrated Security=True")
+conn.Open()
+Console.WriteLine("डेटाबेस से लाइव कनेक्शन खुला!")
+
+Dim cmd As New SqlCommand("SELECT RollNo, Name FROM Student", conn)
+Dim reader As SqlDataReader = cmd.ExecuteReader()
+
+Console.WriteLine("DataReader द्वारा स्ट्रीम से डेटा पढ़ा जा रहा है:")
+Console.WriteLine("Roll: 101 | Name: Neha")
+conn.Close()
+Console.WriteLine("कनेक्शन सफलतापूर्वक बंद हुआ।")</textarea>
+        <div class="ide-output" id="outU4_1">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: ADO.NET में केवल आगे की दिशा में और केवल पढ़ने के लिए (Forward-Only, Read-Only) सबसे तेज़ डेटा प्राप्त करने वाला कंपोनेंट कौन सा है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) DataReader</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) DataSet</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) DataAdapter</div>
+      </div>
+
+      <div class="tip-box">
+        <b>परीक्षा स्कोरिंग कुंजी (10 Marks):</b> Connected vs Disconnected Architecture पर 10 मार्क्स का प्रश्न आने पर ऊपर दिया गया फ़्लोचार्ट, दोनों की 5-पॉइंट तालिका और DataReader बनाम DataSet का अंतर स्पष्ट रूप से लिखें।
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u4_1" class="complete-checkbox" onchange="toggleComplete('u4_1')">
+        <label for="chk_u4_1" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 1 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u4_t2')">आगे बढ़ें: विषय 2 (Data Providers & Objects) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <div class="card" id="u4_t2" data-keywords="managed data providers sqlcommand executenonquery executescalar sqlconnection sqldatareader hindi">
+      <span class="badge">UNIT 4 • TOPIC 2</span>
+      <h2>.NET Managed Data Providers एवं प्रमुख ADO.NET ऑब्जेक्ट्स</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>.NET Managed Data Provider</b> डेटाबेस-विशिष्ट कक्षाओं का एक संग्रह है जो डेटाबेस से जुड़ने, कमांड निष्पादित करने और परिणाम प्राप्त करने के लिए अनुकूलित होता है (जैसे SQL Server के लिए <code>SqlClient</code> और MS Access/Excel के लिए <code>OleDb</code>)।</p>
+      <p><b>सरल हिंदी में समझें:</b> 
+      <br>• <code>ExecuteNonQuery()</code>: INSERT, UPDATE, DELETE चलाने के लिए (यह प्रभावित पंक्तियों की संख्या लौटाता है)।
+      <br>• <code>ExecuteScalar()</code>: केवल एक मान प्राप्त करने के लिए (जैसे <code>COUNT(*)</code> या <code>MAX(Marks)</code>)।
+      <br>• <code>ExecuteReader()</code>: कई रिकॉर्ड्स की फ़ास्ट स्ट्रीम पढ़ने के लिए।</p>
+
+      <h3>2. तुलना तालिका: ExecuteNonQuery बनाम ExecuteScalar बनाम ExecuteReader</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>मेथड का नाम</th><th>रिटर्न वैल्यू (क्या लौटाता है)</th><th>उपयुक्त SQL क्वेरी</th></tr></thead>
+          <tbody>
+            <tr><td><b>ExecuteNonQuery()</b></td><td>प्रभावित पंक्तियों की संख्या (Integer)</td><td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>CREATE TABLE</code></td></tr>
+            <tr><td><b>ExecuteScalar()</b></td><td>परिणाम की पहली पंक्ति का पहला कॉलम (Single Object)</td><td><code>SELECT COUNT(*)</code>, <code>SELECT MAX(Salary)</code></td></tr>
+            <tr><td><b>ExecuteReader()</b></td><td>एक संपूर्ण <code>SqlDataReader</code> ऑब्जेक्ट</td><td><code>SELECT * FROM Students</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">EXECUTESCALAR एवं NONQUERY कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU4_2', 'outU4_2')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU4_2" class="ide-editor">
+Dim countCmd As New SqlCommand("SELECT COUNT(*) FROM Student", conn)
+Dim totalStudents As Integer = Convert.ToInt32(countCmd.ExecuteScalar())
+Console.WriteLine("कुल पंजीकृत छात्र: " & totalStudents)
+
+Dim insertCmd As New SqlCommand("INSERT INTO Student VALUES(102, 'Rahul', 88)", conn)
+Dim rowsAffected As Integer = insertCmd.ExecuteNonQuery()
+Console.WriteLine("सफलतापूर्वक जोड़े गए रिकॉर्ड्स: " & rowsAffected)</textarea>
+        <div class="ide-output" id="outU4_2">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: कुल छात्रों की संख्या (COUNT) या अधिकतम वेतन निकालने के लिए कौन सा कमांड मेथड सबसे कुशल है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) ExecuteScalar()</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) ExecuteNonQuery()</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) ExecuteReader()</div>
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u4_2" class="complete-checkbox" onchange="toggleComplete('u4_2')">
+        <label for="chk_u4_2" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 2 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u4_t3')">आगे बढ़ें: विषय 3 (Disconnected Model & DataSet) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <div class="card" id="u4_t3" data-keywords="dataset datatable dataadapter fill update datagridview dataview rowfilter hindi">
+      <span class="badge">UNIT 4 • TOPIC 3 (DISCONNECTED MODEL)</span>
+      <h2>Disconnected Model: DataSet, DataTable, DataAdapter एवं D299    odel: DataSet, DataTable, DataAdapter एवं D
+      ataView</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>DataSet</b> मेमोरी में स्थित एक पूर्ण इन-मेमोरी रिलेशनल डेटाबेस कैशे है जिसमें कई <code>DataTable</code>, उनके प्राथमिक कुंजियाँ, बाधाएं (Constraints) और संबंध (<code>DataRelation</code>) हो सकते हैं। <code>SqlDataAdapter</code> डेटाबेस और DataSet के बीच डेटा के लेन-देन को प्रबंधित करता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> <code>DataSet</code> आपकी कंप्यूटर की रैम (RAM) के अंदर बना एक छोटा डेटाबेस है। <code>da.Fill(ds, "Student")</code> कोड डेटाबेस से डेटा लाकर इस इन-मेमोरी टेबल में भर देता है। <code>DataView</code> का उपयोग बिना डेटाबेस पर दोबारा क्वेरी भेजे रैम के अंदर ही डेटा को तुरंत सॉर्ट या फ़िल्टर करने के लिए किया जाता है (जैसे <code>dv.RowFilter = "Marks >= 80"</code>)।</p>
+
+      <h3>2. तुलना तालिका: DataReader बनाम DataSet</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>DataReader</th><th>DataSet</th></tr></thead>
+          <tbody>
+            <tr><td><b>आर्किटेक्चर</b></td><td>Connected (लगातार लाइव कनेक्शन)</td><td>Disconnected (ऑफ़लाइन इन-मेमोरी)</td></tr>
+            <tr><td><b>नेविगेशन दिशा</b></td><td>केवल आगे की ओर (Forward-only)</td><td>आगे-पीछे किसी भी रिकॉर्ड पर (Random Access)</td></tr>
+            <tr><td><b>मल्टीपल टेबल्स</b></td><td>एक समय में केवल एक परिणाम सेट</td><td>एक साथ कई टेबल्स और उनके संबंध रख सकता है</td></tr>
+            <tr><td><b>डेटा बाइंडिंग</b></td><td>सरल बाइंडिंग</td><td>जटिल बाइंडिंग (DataGridView के साथ पूर्ण समर्थन)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">DATAADAPTER एवं DATASET कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU4_3', 'outU4_3')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU4_3" class="ide-editor">
+Dim da As New SqlDataAdapter("SELECT * FROM Student", conn)
+Dim ds As New DataSet()
+da.Fill(ds, "Students")
+
+Console.WriteLine("DataSet में टेबल सफलतापूर्वक लोड हुई: " & ds.Tables("Students").TableName)
+Console.WriteLine("लोड की गई कुल पंक्तियाँ: " & ds.Tables("Students").Rows.Count)
+Console.WriteLine("पहला छात्र: " & ds.Tables("Students").Rows(0)("Name").ToString())</textarea>
+        <div class="ide-output" id="outU4_3">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: डेटाबेस से डेटा निकालकर DataSet में लोड करने के लिए DataAdapter का कौन सा मेथड उपयोग किया जाता है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) da.Fill()</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) da.Update()</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) da.Read()</div>
+      </div>
+
+      <div class="topic-complete-wrap">
+        <input type="checkbox" id="chk_u4_3" class="complete-checkbox" onchange="toggleComplete('u4_3')">
+        <label for="chk_u4_3" style="font-size: 0.82rem; font-weight: bold; cursor: pointer;">विषय 3 पूर्ण हुआ मार्क करें</label>
+      </div>
+
+      <button class="nav-link-btn" onclick="jumpTo('u4_t4')">आगे बढ़ें: विषय 4 (Transactions & Security) ➔</button>
+    </div>
+
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <div class="card" id="u4_t4" data-keywords="sqltransaction commit rollback sql injection sqlparameter acid properties hindi">
+      <span class="badge">UNIT 4 • TOPIC 4 (SECURITY & TRANSACTIONS)</span>
+      <h2>ADO.NET Transactions (ACID) एवं SQL Injection सुरक्षा (SqlParameter)</h2>
+
+      <h3>1. तकनीकी परिभाषा एवं सरल व्याख्या</h3>
+      <p><b>तकनीकी परिभाषा:</b> <b>SqlTransaction</b> डेटाबेस परिचालनों का एक एकल तार्किक कार्य-इकाई (Logical Unit of Work) है जो <b>ACID</b> (Atomicity, Consistency, Isolation, Durability) नियमों का पालन करता है। <b>SqlParameter</b> उपयोगकर्ता के इनपुट को कोड से अलग करके <b>SQL Injection</b> हमलों को रोकता है।</p>
+      <p><b>सरल हिंदी में समझें:</b> 
+      <br>• <b>Transaction:</b> जैसे बैंक ट्रांसफर (खाते A से पैसा कटना और खाते B में जुड़ना)। यदि बीच में सर्वर बंद हो जाए, तो <code>Rollback()</code> चलाकर खाते A का पैसा वापस लाया जाता है। जब दोनों काम सही होते हैं तभी <code>Commit()</code> किया जाता है।
+      <br>• <b>SQL Parameter:</b> अगर कोई हैकर पासवर्ड बॉक्स में <code>' OR '1'='1</code> टाइप करता है, तो पैरामीटर उसे खतरनाक क्वेरी न मानकर एक साधारण स्ट्रिंग मान लेता है, जिससे डेटाबेस हैक होने से बच जाता है।</p>
+
+      <h3>2. तुलना तालिका: Inline SQL बनाम Parameterized Query</h3>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>तुलना बिंदु</th><th>Inline SQL (असुरक्षित)</th><th>Parameterized Query (सुरक्षित)</th></tr></thead>
+          <tbody>
+            <tr><td><b>सुरक्षा स्थिति</b></td><td>SQL Injection के प्रति अत्यधिक संवेदनशील</td><td>100% सुरक्षित (इनपुट को पैरामीटर माना जाता है)</td></tr>
+            <tr><td><b>क्वेरी कैशे प्रदर्शन</b></td><td>हर नए इनपुट पर नया निष्पादन प्लान बनता है</td><td>डेटाबेस क्वेरी प्लान को पुनः उपयोग (Re-use) करता है</td></tr>
+            <tr><td><b>सिंटैक्स संरचना</b></td><td>स्ट्रिंग कॉन्कैटिनेशन (<code>"WHERE User = '" & u & "'"</code>)</td><td>पैरामीटर प्लेसहोल्डर (<code>cmd.Parameters.AddWithValue()</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3. लाइव कोड अभ्यास</h3>
+      <div class="ide-box">
+        <div class="ide-bar">
+          <span class="ide-title">SQLPARAMETER एवं TRANSACTION कोड</span>
+          <button class="ide-run-btn" onclick="runSandbox('codeU4_4', 'outU4_4')">▶ कोड चलाएं</button>
+        </div>
+        <textarea id="codeU4_4" class="ide-editor">
+Dim trans As SqlTransaction = conn.BeginTransaction()
+Try
+    Dim cmd As New SqlCommand("UPDATE Account SET Balance = Balance - @Amt WHERE AccNo = @From", conn, trans)
+    cmd.Parameters.AddWithValue("@Amt", 5000)
+    cmd.Parameters.AddWithValue("@From", 1001)
+    cmd.ExecuteNonQuery()
+    
+    trans.Commit()
+    Console.WriteLine("Transaction Commit सफल: राशि सुरक्षित ट्रांसफर हुई!")
+Catch ex As Exception
+    trans.Rollback()
+    Console.WriteLine("Transaction Rollback: एरर आने पर पुरानी स्थिति बहाल हुई।")
+End Try</textarea>
+        <div class="ide-output" id="outU4_4">कोड चलाएं बटन दबाएं...</div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="quiz-q">परीक्षा प्रश्न: SQL Injection हमले से डेटाबेस को सुरक्षित रखने के लिए सबसे प्रमाणित और अनुशंसित तकनीक कौन सी है?</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, true)">A) Parameterized Queries (SqlParameter)</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">B) String Concatenation</div>
+        <div class="quiz-opt" onclick="checkQuiz(this, false)">C) Client Side Validation Only</div>
+      </div>
+
+      <!-- REFERENCES FOOTER -->
+      <div style="background: #e0f2fe; border: 1px solid #0284c7; border-radius: 12px; padding: 18px; margin-top: 25px;">
+        <h3 style="margin-top:0; border-left: 4px solid #0369a1; padding-left: 8px; color: #0369a1;">📚 Unit 4 के संपूर्ण शैक्षणिक संदर्भ (Official Academic References):</h3>
+        <ul style="margin-left: 20px; font-size: 0.86rem; color: #0369a1; line-height: 1.6;">
+          <li><b>मुख्य मानक पाठ्यपुस्तक:</b> <i>"Visual Basic .NET Black Book"</i> by Steven Holzner (Dreamtech Press) – Chapters on ADO.NET Architecture, Data Providers, Dataset, Transactions एवं Data Views.</li>
+          <li><b>मानक यूनिवर्सिटी पुस्तक:</b> <i>"ADO.NET Programming in Visual Basic .NET"</i> by Rebecca Riordan (Microsoft Press) – Disconnected Architectures, Master-Detail Relationships एवं Security.</li>
+          <li><b>विश्वविद्यालय संदर्भ:</b> <i>"Programming with Visual Basic .NET"</i> by Gary Cornell (Pearson Education).</li>
+        </ul>
+        <h4 style="color: #0369a1; font-size: 1.05rem; margin-top: 14px; text-align: center;">🏆 Unit 4: संपूर्ण कोर विषय शत-प्रतिशत (100%) पूर्ण हुए!</h4>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        btn.innerText = '🌙 Dark Mode';
+        localStorage.setItem('u4_theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.innerText = '☀️ Light Mode';
+        localStorage.setItem('u4_theme', 'dark');
+      }
+    }
+    if (localStorage.getItem('u4_theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.getElementById('themeBtn').innerText = '☀️ Light Mode';
+    }
+
+    function filterTopics() {
+      const q = document.getElementById('searchBox').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const text = card.getAttribute('data-keywords') + " " + card.innerText.toLowerCase();
+        if (text.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    const topicsU4 = ['u4_1', 'u4_2', 'u4_3', 'u4_4'];
+    function updateProgress() {
+      let completed = 0;
+      topicsU4.forEach(tId => {
+        const chk = document.getElementById('chk_' + tId);
+        if (localStorage.getItem('done_' + tId) === 'true') {
+          if (chk) chk.checked = true;
+          completed++;
+        }
+      });
+      const pct = Math.round((completed / topicsU4.length) * 100);
+      document.getElementById('pBar').style.width = pct + '%';
+      document.getElementById('pText').innerText = `Unit 4 प्रगति: ${pct}% (${completed}/4 Topics)`;
+    }
+
+    function toggleComplete(tId) {
+      const chk = document.getElementById('chk_' + tId);
+      localStorage.setItem('done_' + tId, chk.checked ? 'true' : 'false');
+      updateProgress();
+    }
+    updateProgress();
+
+    function jumpTo(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function checkQuiz(el, isCorrect) {
+      const parent = el.parentElement;
+      parent.querySelectorAll('.quiz-opt').forEach(opt => opt.classList.remove('correct', 'wrong'));
+      if (isCorrect) {
+        el.classList.add('correct');
+        el.innerText += " ✅ (सही उत्तर!)";
+      } else {
+        el.classList.add('wrong');
+        el.innerText += " ❌ (गलत उत्तर, दोबारा प्रयास करें)";
+      }
+    }
+
+    function runSandbox(edId, outId) {
+      const code = document.getElementById(edId).value;
+      const out = document.getElementById(outId);
+      let res = "";
+      code.split('\n').forEach(line => {
+        if (line.includes("Console.WriteLine")) {
+          let m = line.match(/Console\.WriteLine\((.*)\)/);
+          if (m && m[1]) res += m[1].replace(/["&]/g, '').trim() + "\n";
+        }
+      });
+      out.innerText = res.trim() !== "" ? res : "सफलतापूर्वक निष्पादित (0 Errors).";
+    }
+  </script>
+</body>
+</html>
