@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई I: डॉट-नेट फ्रेमवर्क का सिंहावलोकन (Overview of .NET Framework)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --accent: #06b6d4;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success: #10b981;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 30px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent);
+        }
+        header h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
+        header p { font-size: 1rem; color: #cbd5e1; }
+        
+        .content {
+            padding: 40px;
+        }
+
+        h2 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+        }
+
+        ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+
+        pre, code {
+            background: #090d16;
+            color: #38bdf8;
+            padding: 12px;
+            border-radius: 6px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>डॉट-नेट फ्रेमवर्क का सिंहावलोकन (Overview of .NET Framework)</h1>
+        <p>बीसीए पंचम (V) सेमेस्टर • सीएएससी-14T: डॉट-नेट प्रोग्रामिंग</p>
+    </header>
+
+    <div class="content">
+        <h2>परिचय (Introduction)</h2>
+        <p>डॉट-नेट (.NET) फ्रेमवर्क माइक्रोसॉफ्ट द्वारा विकसित एक सॉफ्टवेयर विकास मंच (Software Development Platform) है। इसे विभिन्न प्रकार के अनुप्रयोगों (Applications) जैसे कि विंडोज एप्लीकेशन, वेब एप्लीकेशन, और मोबाइल सेवाओं को बनाने और चलाने के लिए डिज़ाइन किया गया है। यह डेवलपर्स को विभिन्न प्रोग्रामिंग भाषाओं (जैसे C#, VB.NET, F#) में कोड लिखने और एक साझा रनटाइम वातावरण का उपयोग करने की स्वतंत्रता देता है।</p>
+
+        <h2>डॉट-नेट फ्रेमवर्क की मुख्य विशेषताएं</h2>
+        <ul>
+            <li><strong>प्लेटफॉर्म स्वतंत्रता (Platform Independence):</strong> .NET कोर के आने से अब यह विंडोज के अलावा लिनक्स (Linux) और मैकओएस (macOS) पर भी काम करता है।</li>
+            <li><strong>भाषा अंतःक्रियाशीलता (Language Interoperability):</strong> एक भाषा में लिखा गया कोड दूसरी भाषा में आसानी से उपयोग किया जा सकता है।</li>
+            <li><strong>स्वचालित स्मृति प्रबंधन (Automatic Memory Management):</strong> गारबेज कलेक्टर (Garbage Collector) के माध्यम से मेमोरी का प्रबंधन अपने आप होता है।</li>
+            <li><strong>व्यापक क्लास लाइब्रेरी (Comprehensive Class Library):</strong> इसमें पहले से ही हजारों पूर्व-निर्मित कक्षाएं (Classes) और फलन उपलब्ध हैं।</li>
+        </ul>
+
+        <h2>एक साधारण C# प्रोग्राम का उदाहरण</h2>
+        <p>नीचे डॉट-नेट फ्रेमवर्क के अंतर्गत C# भाषा में लिखा गया एक बुनियादी 'Hello World' प्रोग्राम दर्शाया गया है:</p>
+
+        <code>
+using System;
+
+namespace MyFirstApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("नमस्ते, डॉट-नेट प्रोग्रामिंग दुनिया!");
+        }
+    }
+}
+        </code>
+
+        <h2>निष्कर्ष</h2>
+        <p>डॉट-नेट फ्रेमवर्क आधुनिक सॉफ्टवेयर इंजीनियरिंग में एक मील का पत्थर है, जो डेवलपर्स को उच्च गुणवत्ता वाले, सुरक्षित और मजबूत एप्लीकेशन कम समय में विकसित करने की शक्ति प्रदान करता है।</p>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-btn">← मुख्य पृष्ठ (Home)</a>
+            <a href="features_and_architecture.html" class="nav-btn">अगला विषय →</a>
+        </div>
+    </div>
+</div>
+
+</body>
+          </html>
+          <!-- Ultimate Permanent Hindi Translator Script for Mobile & Web -->
+<div id="google_translate_element" style="display:none;"></div>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'hi',
+            autoDisplay: false
+        }, 'google_translate_element');
+
+        // Automatic trigger for pure Hindi conversion
+        var triggerTranslation = setInterval(function () {
+            var selectField = document.querySelector('.goog-te-combo');
+            if (selectField) {
+                selectField.value = 'hi';
+                selectField.dispatchEvent(new Event('change'));
+                // Force dispatch for mobile browsers
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('change', true, true);
+                selectField.dispatchEvent(event);
+                clearInterval(triggerTranslation);
+            }
+        }, 100);
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<style>
+    /* Google ka top banner aur extra gap hatane ke liye */
+    .goog-te-banner-frame.skiptranslate { display: none !important; }
+    body { top: 0px !important; position: static !important; }
+    
+    /* Yeh code aapke programming code aur tags ko English mein hi surakshit rakhega */
+    pre, code, .badge, th, script, style, .no-translate {
+        translate: no;
+    }
+</style>
