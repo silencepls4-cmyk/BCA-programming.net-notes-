@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई IV: ASP.NET पेज लाइफसाइकिल और इवेंट्स - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई IV: ASP.NET पेज लाइफसाइकिल और इवेंट्स</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>ASP.NET वेब फॉर्म्स में जब भी कोई उपयोगकर्ता किसी वेब पेज का अनुरोध (Request) करता है, तो सर्वर पर वह पेज कई निश्चित चरणों से गुजरते हुए निष्पादित होता है। इस पूरी प्रक्रिया को <strong>Page Lifecycle (पेज लाइफसाइकिल)</strong> कहा जाता है।</p>
+    <p>पेज अपने जीवनचक्र के दौरान कई क्रमिक चरणों (जैसे Initialization, Loading, Validation, Rendering और Unload) से गुजरता है, और प्रत्येक चरण में विशिष्ट इवेंट्स (Events) ट्रिगर होते हैं जिनका उपयोग डेवलपर अपनी कोडिंग आवश्यकताओं को पूरा करने के लिए करते हैं।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं प्रमुख चरण (Key Points & Lifecycle Stages)</h2>
+    <ul>
+        <li><strong>Page_Init:</strong> यह पेज का सबसे पहला चरण है जहाँ कंट्रोल्स का निर्माण (Initialization) और उनके डिफ़ॉल्ट मान सेट किए जाते हैं।</li>
+        <li><strong>Page_Load:</strong> यह सबसे अधिक उपयोग होने वाला चरण है जहाँ व्यू-स्टेट रीस्टोर होता है और डेटाबेस से डेटा लोड किया जाता है।</li>
+        <li><strong>Validation:</strong> इस चरण में यूजर द्वारा दिए गए इनपुट की जाँच (Validation controls) की जाती है।</li>
+        <li><strong>PostBack Event Handling:</strong> यदि यूजर ने कोई बटन क्लिक किया है, तो उससे संबंधित इवेंट कोड निष्पादित होता है।</li>
+        <li><strong>Page_Unload:</strong> पेज पूरी तरह रेंडर होने के बाद मेमोरी से साफ होने से पहले का अंतिम चरण है।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>ASP.NET पेज लाइफसाइकिल के विभिन्न चरणों का क्रमबद्ध प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                    1. Page Request                      |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                    2. Page Initialization (Init)        |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                    3. Loading (Page_Load)               |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                    4. Validation                        |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                    5. PostBack Event Handling           |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                    6. Rendering & Unload                |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> अनुरोध आने से लेकर पेज के रेंडर होने तक ASP.NET इंजन इन सभी चरणों को स्वचालित रूप से एक निश्चित क्रम में निष्पादित करता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>पेज लाइफसाइकिल की समझ का उपयोग निम्नलिखित क्षेत्रों में होता है:</p>
+    <ul>
+        <li>यह तय करने में कि डेटाबेस से डेटा केवल पहली बार लोड हो (IsPostBack की जाँच करके) न कि हर रीफ्रेश पर।</li>
+        <li>कंट्रोल्स के मानों और इवेंट्स को सही क्रम में प्रबंधित करने में।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>प्रत्येक चरण पारदर्शी होता है जिससे डेवलपर को सटीक नियंत्रण मिलता है कि कौन सा कोड कब चलना चाहिए।</li>
+        <li>ऑटोमैटिक स्टेट मैनेजमेंट और कंट्रोल रिकवरी आसान हो जाती है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>जीवनचक्र के चरणों का क्रम न समझने पर डेटा बाइंडिंग में अप्रत्याशित त्रुटियां आ सकती हैं।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Page_Init बनाम Page_Load (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>Page_Init चरण</th>
+            <th>Page_Load चरण</th>
+        </tr>
+        <tr>
+            <td>मुख्य उद्देश्य</td>
+            <td>कंट्रोल्स को आरंभ करना और उनके प्रारंभिक मान तय करना।</td>
+            <td>कंट्रोल्स में डेटा लोड करना और पोस्टबैक स्थिति संभालना।</td>
+        </tr>
+        <tr>
+            <td>व्यू-स्टेट की उपलब्धता</td>
+            <td>इस चरण में व्यू-स्टेट अभी उपलब्ध नहीं होता है।</td>
+            <td>इस चरण तक व्यू-स्टेट पूरी तरह लोड हो चुका होता है।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में IsPostBack का उपयोग करके पेज लोड को प्रबंधित करने का संक्षिप्त उदाहरण:</p>
+    <code>
+using System;
+using System.Web.UI;
+
+public partial class LifecycleExample : Page {
+    protected void Page_Load(object sender, EventArgs e) {
+        // जाँच करें कि क्या यह पेज पहली बार लोड हो रहा है या बटन क्लिक (PostBack) हुआ है
+        if (!IsPostBack) {
+            lblStatus.Text = "पेज पहली बार लोड हो रहा है। डेटा लोड किया जा रहा है...";
+            LoadInitialData();
+        } else {
+            lblStatus.Text = "यह एक पोस्टबैक (PostBack) अनुरोध है।";
+        }
+    }
+
+    private void LoadInitialData() {
+        // डेटाबेस या लिस्ट लोड करने का कोड
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> ASP.NET पेज लाइफसाइकिल वेब फॉर्म्स के निष्पादन और नियंत्रण की रीढ़ है, जिसे समझना हर डेवलपर के लिए आवश्यक है。<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ASP.NET Page Life Cycle Overview Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit4_topic1.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <a href="unit4_topic3.html" class="btn">अगला टॉपिक (Next) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई IV के इस नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
