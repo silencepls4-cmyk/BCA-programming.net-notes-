@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई III (शेष टॉपिक): ट्रांजैक्शन मैनेजमेंट और कमांड बिल्डर - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई III (शेष टॉपिक): ट्रांजैक्शन मैनेजमेंट और कमांड बिल्डर</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>ADO.NET में डेटाबेस संचालन को पूर्ण और सुरक्षित बनाने के लिए <strong>Transaction Management (ट्रांजैक्शन मैनेजमेंट)</strong> और <strong>CommandBuilder (कमांड बिल्डर)</strong> अत्यंत महत्वपूर्ण घटक हैं।</p>
+    <p><strong>ट्रांजैक्शन (Transaction)</strong> कार्यों का एक ऐसा समूह है जो 'सब कुछ या कुछ नहीं' (All or Nothing - ACID गुण) के सिद्धांत पर काम करता है। यदि समूह का एक भी कार्य विफल हो जाता है, तो सभी पिछले बदलाव स्वतः रद्द (Rollback) हो जाते हैं। दूसरी ओर, <strong>SqlCommandBuilder</strong> स्वचालित रूप से डेटासेट (DataSet) में किए गए बदलावों को डेटाबेस में वापस भेजने के लिए INSERT, UPDATE और DELETE जैसी SQL कमांड्स स्वतः उत्पन्न करता है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं विशेषताएं (Key Points & Features)</h2>
+    <ul>
+        <li><strong>ACID गुण:</strong> ट्रांजैक्शन के चार मुख्य स्तंभ—Atomicity, Consistency, Isolation, और Durability हैं।</li>
+        <li><strong>Commit और Rollback:</strong> सभी कार्य सफल होने पर <code>Commit()</code> से डेटाबेस पक्का होता है, और त्रुटि होने पर <code>Rollback()</code> से पुराना डेटा सुरक्षित रहता है।</li>
+        <li><strong>CommandBuilder:</strong> यह <code>SqlDataAdapter</code> के साथ मिलकर काम करता है ताकि डेवलपर को बार-बार इंसर्ट या अपडेट क्वेरी खुद न लिखनी पड़े।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>ट्रांजैक्शन मैनेजमेंट की कार्यप्रणाली का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                Begin Database Transaction               |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|           Execute Multiple SQL Operations               |
++---------------------------------------------------------+
+                             ↓
+         [क्या सभी ऑपरेशंस पूरी तरह सफल रहे?]
+                   /                \
+             (हाँ / Yes)          (नागवार / No)
+               /                      \
++---------------------------+  +--------------------------+
+|   Transaction.Commit()    |  |   Transaction.Rollback() |
+| (स्थायी रूप से सेव करना)  |  | (पुराने स्टेट पर लौटना)   |
++---------------------------+  +--------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> ट्रांजैक्शन शुरू होने के बाद सभी कमांड्स परखी जाती हैं। सफलता मिलने पर कमिट होता है और गलती होने पर रोलबैक के जरिए डेटा सुरक्षित रखा जाता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>इन तकनीकों का उपयोग निम्नलिखित क्षेत्रों में होता है:</p>
+    <ul>
+        <li>बैंकिंग ट्रांजैक्शन (जैसे एक खाते से पैसे कटकर दूसरे खाते में जमा होना)।</li>
+        <li>ऑटोमेटेड डेटा अपडेट और सिंक करने की प्रक्रियाओं में।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>डेटाबेस की अखंडता (Data Integrity) बनी रहती है और कभी भी डेटा आधा-अधूरा नहीं रहता।</li>
+        <li>कमांड बिल्डर के उपयोग से कोडिंग का समय बहुत बच जाता है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>कमांड बिल्डर केवल सिंगल-टेबल (Single table) परिदृश्यों के लिए सबसे अच्छा काम करता है, जटिल जॉइन (Complex Joins) के लिए यह सीमित है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Commit बनाम Rollback (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>Commit (कमिट)</th>
+            <th>Rollback (रोलबैक)</th>
+        </tr>
+        <tr>
+            <td>मुख्य कार्य</td>
+            <td>डेटाबेस में किए गए सभी बदलावों को **स्थाई (Permanent)** करना।</td>
+            <td>त्रुटि आने पर सभी बदलावों को **रद्द करके पूर्ववत** करना।</td>
+        </tr>
+        <tr>
+            <td>स्थिति</td>
+            <td>यह केवल तब चलता है जब सभी प्रक्रियाएं सफल हों।</td>
+            <td>यह तब सक्रिय होता है जब प्रक्रिया के दौरान कोई अपवाद (Exception) आए।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में ट्रांजैक्शन मैनेजमेंट (Try-Catch के साथ) का एक संक्षिप्त उदाहरण नीचे प्रस्तुत है:</p>
+    <code>
+using System;
+using System.Data.SqlClient;
+
+class TransactionExample {
+    static void Main(string[] args) {
+        string connString = "Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;";
+        using (SqlConnection conn = new SqlConnection(connString)) {
+            conn.Open();
+            SqlTransaction transaction = conn.BeginTransaction();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.Transaction = transaction;
+
+            try {
+                cmd.CommandText = "UPDATE Accounts SET Balance = Balance - 500 WHERE AccountID = 1";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "UPDATE Accounts SET Balance = Balance + 500 WHERE AccountID = 2";
+                cmd.ExecuteNonQuery();
+
+                transaction.Commit(); // सफलता पर पक्का करना
+                Console.WriteLine("ट्रांजैक्शन सफलतापूर्वक पूर्ण हुआ!");
+            }
+            catch (Exception ex) {
+                transaction.Rollback(); // त्रुटि पर वापस लौटना
+                Console.WriteLine("त्रुटि के कारण ट्रांजैक्शन रद्द कर दिया गया: " + ex.Message);
+            }
+        }
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> ट्रांजैक्शन मैनेजमेंट डेटा की सुरक्षा सुनिश्चित करता है, और कमांड बिल्डर डेटाबेस ऑपरेशंस को सरल बनाता है। इसके साथ ही **इकाई III के सभी टॉपिक्स अब पूरी तरह समाप्त हो चुके हैं।**<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ADO.NET Transactions and CommandBuilder Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit3_topic6.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <a href="unit4_topic1.html" class="btn">इकाई IV पर जाएँ (Next Unit) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई III के सभी शेष नोट्स को सफलतापूर्वक पूर्ण करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
