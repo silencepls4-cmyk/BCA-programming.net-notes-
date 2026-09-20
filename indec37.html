@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई IV (विशेष टॉपिक): यूजर कंट्रोल्स और कॉन्फ़िगरेशन - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई IV: यूजर कंट्रोल्स और वेब.कॉन्फिग कॉन्फ़िगरेशन</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>ASP.NET वेब फॉर्म्स में <strong>User Controls (यूजर कंट्रोल्स)</strong> ऐसे पुनर्चक्रण योग्य (Reusable) घटक होते हैं जिन्हें डेवलपर एक बार बनाकर वेबसाइट के कई अलग-अलग पेजों पर उपयोग कर सकते हैं (जैसे हेडर, फुटर या लॉगिन पैनल)। इनका एक्सटेंशन <code>.ascx</code> होता है।</p>
+    <p>इसके साथ ही, <strong>Web.config</strong> फाइल एक XML आधारित कॉन्फ़िगरेशन फाइल है जो पूरे वेब एप्लीकेशन के व्यवहार, डेटाबेस कनेक्शन स्ट्रिंग, सुरक्षा सेटिंग्स (Authentication) और एरर हैंडलिंग को नियंत्रित करती है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं विशेषताएं (Key Points & Features)</h2>
+    <ul>
+        <li><strong>.ascx एक्सटेंशन:</strong> यूजर कंट्रोल्स को .ascx फाइल के रूप में सेव किया जाता है और इन्हें .aspx पेजों में आसानी से रजिस्टर किया जाता है।</li>
+        <li><strong>कोड पुनर्चक्रण (Code Reusability):</strong> एक ही कोड को बार-बार लिखने की आवश्यकता नहीं पड़ती, जिससे समय और मेहनत बचती है।</li>
+        <li><strong>Web.config Settings:</strong> यह पूरे एप्लीकेशन के लिए ग्लोबल सेटिंग्स का केंद्रीय केंद्र (Central configuration hub) है।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>यूजर कंट्रोल और वेब.कॉन्फिग की कार्यप्रणाली का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Web.config (Global Settings)           |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                ASP.NET Web Application                  |
+|  +---------------------------------------------------+  |
+|  |           User Control (.ascx Component)          |  |
+|  +---------------------------------------------------+  |
+|  |           Content Page (.aspx Page)               |  |
+|  +---------------------------------------------------+  |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> वेब.कॉन्फिग पूरे एप्लीकेशन को वैश्विक निर्देश देता है, जबकि यूजर कंट्रोल्स को विभिन्न .aspx पेजों के अंदर समाहित करके उपयोग किया जाता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>इन घटकों का उपयोग निम्नलिखित क्षेत्रों में किया जाता है:</p>
+    <ul>
+        <li>वेबसाइट के सभी पेजों पर एक समान मेन्यू बार और बैनर प्रदर्शित करने में।</li>
+        <li>डेटाबेस कनेक्शन स्ट्रिंग और सुरक्षा नियमों को सुरक्षित रूप से प्रबंधित करने के लिए।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>रखरखाव (Maintenance) बहुत आसान हो जाता है क्योंकि यूजर कंट्रोल में किया गया बदलाव सभी पेजों पर लागू हो जाता है।</li>
+        <li>ग्लोबल सेटिंग्स को एक ही फाइल से आसानी से बदला जा सकता है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>यूजर कंट्रोल्स सीधे स्वतंत्र रूप से रन नहीं हो सकते, इन्हें हमेशा किसी .aspx पेज के अंदर रखना पड़ता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: .aspx पेज बनाम .ascx यूजर कंट्रोल (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>Standard Page (.aspx)</th>
+            <th>User Control (.ascx)</th>
+        </tr>
+        <tr>
+            <td>निष्पादन (Execution)</td>
+            <td>यह एक स्वतंत्र वेब पेज होता है जिसे सीधे ब्राउज़र में खोला जा सकता है।</td>
+            <td>यह एक घटक होता है जो किसी .aspx पेज के अंदर एम्बेड किया जाता है।</td>
+        </tr>
+        <tr>
+            <td>कंटेनर टैग</td>
+            <td>इसमें <code>&lt;html&gt;</code> और <code>&lt;form runat="server"&gt;</code> होता है।</td>
+            <td>इसमें सीधे कंट्रोल्स होते हैं, अलग से HTML ढांचा नहीं होता।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>ASP.NET में यूजर कंट्रोल (.ascx) और वेब.config का एक संक्षिप्त उदाहरण:</p>
+    <code>
+<%-- HeaderControl.ascx --%>
+<%@ Control Language="C#" %>
+<div style="background-color:#cc0000; color:white; padding:10px;">
+    <h3>यह एक पुनर्चक्रण योग्य यूजर कंट्रोल हेडर है</h3>
+</div>
+
+<%-- Web.config Connection String Example --%>
+&lt;configuration&gt;
+    &lt;connectionStrings&gt;
+        &lt;add name="MyDbConn" connectionString="Data Source=ServerName;Initial Catalog=DBName;Integrated Security=True" /&gt;
+    &lt;/connectionStrings&gt;
+&lt;/configuration&gt;
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> यूजर कंट्रोल्स और वेब.कॉन्फिग फाइलें ASP.NET वेब फॉर्म्स को व्यवस्थित, मॉड्यूलर और सुरक्षित बनाती हैं। इसके साथ ही **इकाई IV अब पूर्णतः और गहराई से समाप्त हो चुकी है।**<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ASP.NET User Controls and Web.config Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit4_topic_prev.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <span class="btn" style="background-color: #555555; cursor: default;">इकाई IV पूर्णतः संपन्न (Unit IV Fully Completed)</span>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई IV के इस अंतिम विषय को सफलतापूर्वक पूर्ण करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
