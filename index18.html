@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई II: अपवाद प्रबंधन (Exception Handling in C#) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई II: अपवाद प्रबंधन (Exception Handling in C#)</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>सी# (C#) प्रोग्रामिंग में <strong>Exception Handling (अपवाद प्रबंधन)</strong> एक ऐसा मजबूत तंत्र है जो प्रोग्राम के निष्पादन के दौरान आने वाली अप्रत्याशित त्रुटियों (Run-time Errors) को नियंत्रित और प्रबंधित करता है। जब साफ्टवेयर चलते समय किसी समस्या (जैसे किसी संख्या को शून्य से भाग देना या मौजूद न होने वाली फाइल खोलना) का सामना करता है, तो प्रोग्राम अचानक क्रैश होने के बजाय एक अपवाद (Exception) उत्पन्न करता है।</p>
+    <p>अपवाद प्रबंधन के माध्यम से डेवलपर उस त्रुटि को पकड़कर यूजर को एक सुरक्षित संदेश दिखा सकता है और साफ्टवेयर के सामान्य प्रवाह को टूटने से बचा सकता है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं मुख्य कीवर्ड (Key Points & Keywords)</h2>
+    <ul>
+        <li><strong>try ब्लॉक:</strong> इस ब्लॉक के अंदर वह कोड लिखा जाता है जिसमें त्रुटि आने की संभावना होती है।</li>
+        <li><strong>catch ब्लॉक:</strong> यदि try ब्लॉक में कोई त्रुटि आती है, तो catch ब्लॉक उसे पकड़कर संभालता है (Handle करता है)।</li>
+        <li><strong>finally ब्लॉक:</strong> यह ब्लॉक त्रुटि आए या न आए, हमेशा निष्पादित होता है (जैसे डेटाबेस कनेक्शन बंद करना)।</li>
+        <li><strong>throw कीवर्ड:</strong> इसके जरिए स्वेच्छा से एक नया अपवाद उत्पन्न किया जा सकता है।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>try, catch और finally ब्लॉक की कार्यप्रणाली का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                    Start Try Block                      |
++---------------------------------------------------------+
+                             ↓
+          [क्या रनटाइम पर कोई त्रुटि (Exception) आई?]
+                     /                  \
+              (हाँ / Yes)            (नहीं / No)
+                 /                          \
++-------------------------------+  +--------------------------+
+|      Execute Catch Block      |  |  Skip Catch Block        |
++-------------------------------+  +--------------------------+
+                 \                          /
+                  v                        v
++---------------------------------------------------------+
+|                   Execute Finally Block                 |
+|             (संसाधन मुक्त करना और सामान्य प्रवाह)         |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> ट्राई ब्लॉक में कोड चलता है। यदि त्रुटि आती है तो कैच ब्लॉक उसे संभालता है, और अंत में फाइनली ब्लॉक हमेशा निष्पादित होकर संसाधनों को साफ करता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>अपवाद प्रबंधन का उपयोग निम्नलिखित क्षेत्रों में किया जाता है:</p>
+    <ul>
+        <li>फाइल इनपुट-आउटपुट (File I/O) संचालन में जहाँ फाइल अनुपलब्ध हो सकती है।</li>
+        <li>डेटाबेस कनेक्टिविटी और नेटवर्क अनुरोधों के दौरान उत्पन्न होने वाली बाधाओं को दूर करने में।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>अचानक प्रोग्राम क्रैश होने से बच जाता है और यूजर को बेहतर अनुभव मिलता है।</li>
+        <li>त्रुटि की सटीक जानकारी डिबगिंग के दौरान मिल जाती है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>अत्यधिक मात्रा में try-catch ब्लॉक का उपयोग करने से प्रोग्राम की गति (Performance) पर थोड़ा प्रभाव पड़ सकता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Compile-time Error बनाम Run-time Exception (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>कम्पाइल-टाइम एरर (Compile-time Error)</th>
+            <th>रन-टाइम अपवाद (Run-time Exception)</th>
+        </tr>
+        <tr>
+            <td>उत्पन्न होने का समय</td>
+            <td>प्रोग्राम को कंपाइल करते समय (जैसे सिंटैक्स की गलती)।</td>
+            <td>प्रोग्राम के चलते समय (जैसे शून्य से भाग देना)।</td>
+        </tr>
+        <tr>
+            <td>नियंत्रण</td>
+            <td>इसे कोड ठीक करके तुरंत सुधारा जाता है।</td>
+            <td>इसे Exception Handling (try-catch) से प्रबंधित किया जाता है।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में अपवाद प्रबंधन (Try-Catch-Finally) का एक संक्षिप्त उदाहरण नीचे प्रस्तुत है:</p>
+    <code>
+using System;
+
+class Program {
+    static void Main(string[] args) {
+        try {
+            int a = 10, b = 0;
+            int c = a / b; // यहाँ DivideByZeroException आएगा
+            Console.WriteLine("Result: " + c);
+        }
+        catch (DivideByZeroException ex) {
+            Console.WriteLine("त्रुटि आई: शून्य से भाग देना संभव नहीं है!");
+        }
+        finally {
+            Console.WriteLine("Finally ब्लॉक हमेशा चलता है।");
+        }
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> अपवाद प्रबंधन साफ्टवेयर को सुरक्षित और स्थिर बनाता है ताकि अवांछित त्रुटियों के कारण सिस्टम बंद न हो।<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft C# Exception Handling Official Documentation.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="properties_indexers_delegates.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <button class="btn" onclick="window.print();">📥 PDF डाउनलोड करें (Print / Save)</button>
+        <a href="unit2_topic7.html" class="btn">अगला टॉपिक (Next) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई II के इस नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
