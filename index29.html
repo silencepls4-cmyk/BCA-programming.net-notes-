@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई III (शेष टॉपिक): डेटा अडैप्टर और डेटासेट विधियाँ - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई III (शेष टॉपिक): डेटा अडैप्टर, Fill और Update विधियाँ</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>ADO.NET के डिस्कनेक्टेड आर्किटेक्चर (Disconnected Architecture) में <strong>SqlDataAdapter</strong> एक महत्वपूर्ण सेतु (Bridge) का काम करता है। यह डेटाबेस और इन-मेमोरी <code>DataSet</code> या <code>DataTable</code> के बीच डेटा का आदान-प्रदान करता है।</p>
+    <p>डेटा अडैप्टर की दो सबसे प्रमुख विधियाँ <strong>Fill()</strong> और <strong>Update()</strong> हैं। <code>Fill()</code> विधि डेटाबेस से डेटा निकालकर डेटासेट को भरती है, जबकि <code>Update()</code> विधि डेटासेट में किए गए बदलावों (जैसे नए रिकॉर्ड जोड़ना या पुराने बदलना) को वापस मूल डेटाबेस तक पहुँचाती है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं विधियाँ (Key Points & Methods)</h2>
+    <ul>
+        <li><strong>Fill() मेथड:</strong> यह डेटाबेस से SELECT क्वेरी चलाकर डेटा प्राप्त करती है और उसे डेटासेट या डेटाटेबल में लोड करती है।</li>
+        <li><strong>Update() मेथड:</strong> यह डेटासेट के रो (Rows) की स्थिति (RowState - Added, Modified, Deleted) की जांच करती है और तदनुसार डेटाबेस में बदलाव लागू करती है।</li>
+        <li><strong>Command Objects:</strong> डेटा अडैप्टर के भीतर <code>SelectCommand</code>, <code>InsertCommand</code>, <code>UpdateCommand</code> और <code>DeleteCommand</code> जैसी चार कमांड्स होती हैं।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>डेटा अडैप्टर की Fill और Update प्रक्रिया का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Database Server                        |
++---------------------------------------------------------+
+       ↑ (Update Method - Changes Sent Back)   | (Fill Method - Data Loaded)
+       |                                       v
++---------------------------------------------------------+
+|                    SqlDataAdapter                       |
++---------------------------------------------------------+
+       |                                       ↑
+       v (Populates In-Memory Cache)           | (Sends Modified Data)
++---------------------------------------------------------+
+|                  DataSet / DataTable                    |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> Fill मेथड डेटाबेस से डेटा खींचकर DataSet में रखती है, और Update मेथड DataSet के संशोधित डेटा को वापस डेटाबेस सर्वर पर सुरक्षित करती है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>इन विधियों का उपयोग निम्नलिखित क्षेत्रों में होता है:</p>
+    <ul>
+        <li>ऑफ़लाइन डेटा प्रविष्टि और बैच अपडेट (Batch Updates) प्रणालियों में।</li>
+        <li>जब एक साथ हजारों रिकॉर्ड्स को लोड करके स्थानीय स्तर पर संशोधित करना हो।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>लगातार डेटाबेस कनेक्शन खुला रखने की आवश्यकता नहीं होती, जिससे सर्वर सुरक्षित रहता है।</li>
+        <li>एक ही बार में पूरे टेबल का डेटा लोड करके स्थानीय रूप से काम किया जा सकता है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>यदि डेटाबेस में किसी अन्य यूजर ने एक ही समय में डेटा बदल दिया है, तो कॉन्फ्लिक्ट (Concurrency Conflict) आ सकता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Fill() बनाम Update() मेथड (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>Fill() मेथड</th>
+            <th>Update() मेथड</th>
+        </tr>
+        <tr>
+            <td>दिशायुग्म (Direction)</td>
+            <td>डेटाबेस से डेटा **डेटासेट (Dataset)** की ओर आता है।</td>
+            <td>डेटासेट से संशोधित डेटा **डेटाबेस** की ओर जाता है।</td>
+        </tr>
+        <tr>
+            <td>मुख्य उपयोग</td>
+            <td>डेटा को स्क्रीन पर दिखाने के लिए लोड करना।</td>
+            <td>यूजर द्वारा किए गए बदलावों को डेटाबेस में सहेजना।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में DataAdapter के जरिए Fill और Update करने का संक्षिप्त उदाहरण:</p>
+    <code>
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+class AdapterExample {
+    static void Main(string[] args) {
+        string connStr = "Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;";
+        using (SqlConnection conn = new SqlConnection(connStr)) {
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Employees", conn);
+            SqlCommandBuilder cb = new SqlCommandBuilder(da); // स्वचालित कमांड जनरेट करता है
+            
+            DataSet ds = new DataSet();
+            da.Fill(ds, "Employees"); // डेटा लोड करना (Fill)
+            
+            // डेटा में बदलाव करने के बाद...
+            // da.Update(ds, "Employees"); // डेटाबेस में वापस भेजना (Update)
+            Console.WriteLine("डेटा अडैप्टर Fill और Update प्रक्रिया सफलतापूर्वक समझी गई।");
+        }
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> डेटा अडैप्टर की Fill और Update विधियाँ ADO.NET के डिस्कनेक्टेड डेटा प्रबंधन की रीढ़ हैं। इसके साथ ही **प्रथम तीन इकाइयों के सभी टॉपिक्स अब पूरी तरह से सौ प्रतिशत पूर्ण हो चुके हैं।**<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ADO.NET SqlDataAdapter Fill and Update Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit3_topic_prev.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <a href="unit4_topic1.html" class="btn">इकाई IV - अगला टॉपिक (Next Unit) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और प्रथम तीन इकाइयों के सभी विषयों को पूरी तरह से पूर्ण करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
