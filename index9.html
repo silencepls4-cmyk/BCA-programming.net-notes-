@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई I: डॉट-नेट सुरक्षा मॉडल एवं कोड एक्सेस सिक्योरिटी (CAS) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px,
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई I: डॉट-नेट सुरक्षा मॉडल एवं कोड एक्सेस सिक्योरिटी (CAS)</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>डॉट-नेट फ्रेमवर्क में साफ्टवेयर सुरक्षा को सुनिश्चित करने के लिए एक अत्यंत शक्तिशाली तंत्र का उपयोग किया जाता है जिसे <strong>Code Access Security (CAS - कोड एक्सेस सिक्योरिटी)</strong> कहा जाता है। यह सुरक्षा मॉडल रनटाइम पर्यावरण (CLR) के अंतर्गत काम करता है और यह तय करता है कि किसी विशेष कोड या एप्लीकेशन को सिस्टम के संसाधनों (जैसे फाइल सिस्टम, रजिस्ट्री, नेटवर्क) तक पहुँचने की अनुमति है या नहीं।</p>
+    <p>पारंपरिक ऑपरेटिंग सिस्टम सुरक्षा केवल इस बात पर ध्यान देती है कि यूजर कौन है, लेकिन CAS इस बात पर विचार करता है कि **कोड कहाँ से आया है (Origin/Evidence)** और उसकी विश्वसनीयता क्या है, जिससे दुर्भावनापूर्ण साफ्टवेयर सिस्टम को नुकसान न पहुँचा सकें।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं विशेषताएं (Key Points & Features)</h2>
+    <ul>
+        <li><strong>मूल्य-आधारित सुरक्षा (Evidence-Based Security):</strong> कोड के स्रोत (जैसे इंटरनेट, लोकल ड्राइव या इंट्रानेट) के आधार पर उसे अनुमतियाँ दी जाती हैं।</li>
+        <li><strong>सैंडबॉक्स वातावरण (Sandbox Environment):</strong> संदेहास्पद कोड को एक सीमित दायरे में चलाया जाता है ताकि वह मुख्य ऑपरेटिंग सिस्टम को प्रभावित न कर सके।</li>
+        <li><strong>स्टैक वॉक (Stack Walk):</strong> यह एक ऐसी प्रक्रिया है जिसमें CLR यह जाँचने के लिए कॉल स्टैक की समीक्षा करता है कि क्या सभी कॉल करने वाले कोड के पास आवश्यक अनुमति है।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>कोड एक्सेस सिक्योरिटी (CAS) की जाँच और निष्पादन का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Application Execution                  |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|        Evidence Collection (कोड का स्रोत और पहचान)       |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|          Policy Evaluation & Permission Grant           |
+|         (सुरक्षा नीतियों के आधार पर अनुमति निर्धारण)        |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|           CLR Security Enforcement (Stack Walk)         |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|          Resource Access (Granted / Denied)             |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> जैसे ही कोड संसाधन (Resource) तक पहुँचने का प्रयास करता है, CLR उसके साक्ष्य (Evidence) की जाँच करता है और सुरक्षा नीतियों के अनुसार अनुमति देता या अस्वीकार करता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>CAS का उपयोग निम्नलिखित क्षेत्रों में सुरक्षा के लिए किया जाता है:</p>
+    <ul>
+        <li>इंटरनेट से डाउनलोड किए जाने वाले अनट्रस्टेड वेब कंट्रोल्स और स्क्रिप्ट्स को नियंत्रित करने में।</li>
+        <li>एंटरप्राइज नेटवर्क में संवेदनशील डेटा और फाइलों की अनधिकृत पहुँच रोकने के लिए।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    <h3>लाभ (Pros / Advantages):</h3>
+    <ul>
+        <li>मैलवेयर और दुर्भावनापूर्ण कोड्स से सिस्टम की संपूर्ण सुरक्षा।</li>
+        <li>ग्रेनुअल परमिशन्स (Granular Permissions) के जरिए सटीक नियंत्रण संभव होता है।</li>
+    </ul>
+
+    <h3>हानियां एवं सीमाएं (Cons & Limits):</h3>
+    <ul>
+        <li>स्टैक वॉक प्रक्रिया के कारण कभी-कभी साफ्टवेयर के निष्पादन में हल्का सा निष्पादन विलंब हो सकता है।</li>
+        <li>जटिल नीतियों के प्रबंधन में डेवलपर्स को अतिरिक्त सावधानी बरतनी पड़ती है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Code Access Security बनाम Role-Based Security (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>कोड एक्सेस सिक्योरिटी (CAS)</th>
+            <th>रोल-बेस्ड सिक्योरिटी (Role-Based Security)</th>
+        </tr>
+        <tr>
+            <td>मुख्य आधार</td>
+            <td>यह कोड के **स्रोत (Origin)** और उसकी पहचान पर आधारित है।</td>
+            <td>यह उपयोगकर्ता (User) के **अधिकारों और भूमिका (Role)** पर आधारित है।</td>
+        </tr>
+        <tr>
+            <td>नियंत्रण स्तर</td>
+            <td>सिस्टम संसाधनों (File, Network) तक कोड की पहुँच को रोकना।</td>
+            <td>एप्लीकेशन के भीतर यूजर के कार्यों (Admin/Guest) को नियंत्रित करना।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Summary -->
+    <h2>7. सारांश (Summary)</h2>
+    <p>संक्षेप में, कोड एक्सेस सिक्योरिटी (CAS) डॉट-नेट फ्रेमवर्क का एक कवच है जो यह सुनिश्चित करता है कि केवल विश्वसनीय और प्रमाणित कोड ही सिस्टम के संवेदनशील हिस्सों तक पहुँच सके।</p>
+
+    <!-- 8. References -->
+    <h2>8. संदर्भ (References)</h2>
+    <ul>
+        <li>Microsoft .NET Code Access Security Official Documentation</li>
+        <li>CASC-14T .NET Programming Syllabus (BCA V Semester)</li>
+    </ul>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="garbage_collection.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <button class="btn" onclick="window.print();">📥 PDF डाउनलोड करें (Print / Save)</button>
+        <a href="unit2_topic1.html" class="btn">इकाई II - अगला टॉपिक (Next) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई I के इस अंतिम नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+  </html>
+  
