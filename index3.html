@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई I: मैनेज्ड और अनमैनेज्ड कोड (Managed vs Unmanaged Code) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई I: मैनेज्ड और अनमैनेज्ड कोड</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>डॉट-नेट फ्रेमवर्क में साफ्टवेयर विकास के दौरान कोड के निष्पादन और प्रबंधन के आधार पर कोड को मुख्य रूप से दो श्रेणियों में बांटा जाता है—<strong>Managed Code (मैनेज्ड कोड)</strong> और <strong>Unmanaged Code (अनमैनेज्ड कोड)</strong>।</p>
+    <p><strong>मैनेज्ड कोड</strong> वह कोड होता है जो सीधे कॉमन लैंग्वेज रनटाइम (CLR) के नियंत्रण और प्रबंधन के अंतर्गत निष्पादित होता है। इसके विपरीत, <strong>अनमैनेज्ड कोड</strong> वह कोड होता है जो सीधे ऑपरेटिंग सिस्टम (OS) के अधीन चलता है और इसके प्रबंधन की जिम्मेदारी डेवलपर की होती है (जैसे C या C++ द्वारा बनाए गए पारंपरिक प्रोग्राम)।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं विशेषताएं (Key Points & Features)</h2>
+    <ul>
+        <li><strong>मैनेज्ड कोड की विशेषताएं:</strong> इसमें स्वचालित गारबेज कलेक्शन, टाइप सेफ्टी और मजबूत सुरक्षा जांच मिलती है।</li>
+        <li><strong>अनमैनेज्ड कोड की विशेषताएं:</strong> यह सीधे हार्डवेयर और ओएस के करीब रहकर तेजी से काम करता है, लेकिन इसमें मेमोरी लीक का खतरा रहता है।</li>
+        <li><strong>सहयोग (Interop):</strong> डॉट-नेट फ्रेमवर्क 'P/Invoke' (Platform Invocation Services) के माध्यम से मैनेज्ड कोड के अंदर अनमैनेज्ड कोड (जैसे Win32 API) को चलाने की अनुमति देता है।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>मैनेज्ड और अनमैनेज्ड कोड की कार्यप्रणाली और उनके नियंत्रण तंत्र का अंतर नीचे दिए गए प्रवाह आरेख में स्पष्ट है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Managed Code Execution                 |
+|  [Source Code] → [MSIL] → [CLR Engine & Garbage Collector] |
+|              (पूर्ण सुरक्षा और स्वचालित नियंत्रण)            |
++---------------------------------------------------------+
+
++---------------------------------------------------------+
+|                 Unmanaged Code Execution                |
+|       [C/C++ Code] → [Direct OS API / Native CPU]       |
+|             (डेवलपर द्वारा मैन्युअल मेमोरी नियंत्रण)           |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> मैनेज्ड कोड हमेशा CLR के सुरक्षा घेरे में चलता है, जबकि अनमैनेज्ड कोड सीधे ऑपरेटिंग सिस्टम से सीधे संवाद करता है बिना किसी रनटाइम इंजन की मध्यस्थता के।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>इन दोनों प्रकार के कोड का उपयोग निम्नलिखित परिस्थितियों में किया जाता है:</p>
+    <ul>
+        <li><strong>मैनेज्ड कोड:</strong> अधिकांश आधुनिक वेब, मोबाइल और एंटरप्राइज साफ्टवेयर के निर्माण में।</li>
+        <li><strong>अनमैनेज्ड कोड:</strong> ऑपरेटिंग सिस्टम के आंतरिक ड्राइवरों (Drivers), हार्डवेयर से जुड़े उपकरणों और अत्यधिक तीव्र गणना वाले गेमिंग इंजनों में।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    <h3>मैनेज्ड कोड के लाभ व सीमाएं:</h3>
+    <ul>
+        <li><strong>लाभ:</strong> मेमोरी लीक से मुक्ति, उच्च स्तर की सुरक्षा और सरल डिबगिंग।</li>
+        <li><strong>सीमाएं:</strong> रनटाइम ओवरहेड के कारण गति पर हल्का प्रभाव पड़ सकता है।</li>
+    </ul>
+
+    <h3>अनमैनेज्ड कोड के लाभ व सीमाएं:</h3>
+    <ul>
+        <li><strong>लाभ:</strong> अत्यधिक तीव्र निष्पादन (High Speed) और सिस्टम संसाधनों पर पूर्ण नियंत्रण।</li>
+        <li><strong>सीमाएं:</strong> प्वाइंटर्स की गलती से क्रैश होने का खतरा और मैन्युअल मेमोरी प्रबंधन की जटिलता।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: मैनेज्ड बनाम अनमैनेज्ड कोड (Comprehensive Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>मैनेज्ड कोड (Managed Code)</th>
+            <th>अनमैनेज्ड कोड (Unmanaged Code)</th>
+        </tr>
+        <tr>
+            <td>नियंत्रण निकाय</td>
+            <td>यह Common Language Runtime (CLR) के नियंत्रण में चलता है।</td>
+            <td>यह सीधे ऑपरेटिंग सिस्टम (OS) के अधीन निष्पादित होता है।</td>
+        </tr>
+        <tr>
+            <td>मेमोरी प्रबंधन</td>
+            <td>स्वचालित रूप से गारबेज कलेक्टर (Garbage Collector) द्वारा होता है।</td>
+            <td>डेवलपर को स्वयं (Manual Allocation जैसे malloc/free) करना पड़ता है।</td>
+        </tr>
+        <tr>
+            <td>सुरक्षा एवं जाँच</td>
+            <td>उच्च स्तर की सुरक्षा, टाइप-सेफ्टी और एरर चेकिंग प्रदान करता है।</td>
+            <td>सीमित सुरक्षा जांच, मेमोरी लीक और पॉइंटर एरर का खतरा रहता है।</td>
+        </tr>
+        <tr>
+            <td>निष्पादन गति</td>
+            <td>JIT संकलन के कारण रनटाइम पर प्रारंभिक समय लग सकता है।</td>
+            <td>सीधे मशीन कोड होने के कारण गति अत्यंत तीव्र होती है।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Summary -->
+    <h2>7. सारांश (Summary)</h2>
+    <p>संक्षेप में, मैनेज्ड कोड डॉट-नेट की आधुनिक और सुरक्षित दुनिया का प्रतिनिधित्व करता है, जबकि अनमैनेज्ड कोड पारंपरिक और हार्डवेयर-स्तरीय नियंत्रण प्रदान करता है। परीक्षा की दृष्टि से इन दोनों की तुलना का प्रश्न सबसे महत्वपूर्ण है।</p>
+
+    <!-- 8. References -->
+    <h2>8. संदर्भ (References)</h2>
+    <ul>
+        <li>Microsoft .NET Framework Managed vs Unmanaged Code Guide</li>
+        <li>CASC-14T .NET Programming Syllabus (BCA V Semester)</li>
+        <li>Advanced Software Engineering Textbooks</li>
+    </ul>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="cts_cls_visual_dev.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <button class="btn" onclick="window.print();">📥 PDF डाउनलोड करें (Print / Save)</button>
+        <a href="index.html" class="btn">मुख्य पृष्ठ (Home) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+  </html>
+                          
