@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई III: डेटा बाइंडिंग और डेटा-बाउंड कंट्रोल्स (Data Binding & Controls) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई III: डेटा बाइंडिंग और डेटा-बाउंड कंट्रोल्स</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>डॉट-नेट फ्रेमवर्क में <strong>Data Binding (डेटा बाइंडिंग)</strong> वह प्रक्रिया है जिसके माध्यम से एप्लीकेशन के यूजर इंटरफेस (GUI) कंट्रोल्स (जैसे <code>DataGridView</code>, <code>ListBox</code>, <code>ComboBox</code>) को डेटा स्रोत (जैसे Database, DataSet, या List) के साथ जोड़ा जाता है।</p>
+    <p>डेटा बाइंडिंग के कारण डेटाबेस से आने वाली सूचनाएं स्वचालित रूप से स्क्रीन पर प्रदर्शित हो जाती हैं और उपयोगकर्ता द्वारा किए गए बदलाव वापस डेटा स्रोत में सुरक्षित हो जाते हैं, जिससे मैनुअल कोडिंग की आवश्यकता बहुत हद तक कम हो जाती है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं प्रकार (Key Points & Types of Data Binding)</h2>
+    <ul>
+        <li><strong>सिंपल डेटा बाइंडिंग (Simple Data Binding):</strong> जब किसी सिंगल कंट्रोल (जैसे Label या TextBox का Text) को एक एकल डेटा मान से जोड़ा जाता है।</li>
+        <li><strong>कॉम्प्लेक्स डेटा बाइंडिंग (Complex Data Binding):</strong> जब किसी कंट्रोल (जैसे ComboBox या DataGridView) को डेटा की पूरी सूची या टेबल (Multiple rows/columns) से जोड़ा जाता है।</li>
+        <li><strong>डेटा सोर्स (DataSource):</strong> यह वह माध्यम है जो कंट्रोल्स को डेटा प्रदान करता है।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>डेटा बाइंडिंग की कार्यप्रणाली और डेटा के प्रवाह का आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Database / Data Source                 |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                  DataSet / DataTable                    |
++---------------------------------------------------------+
+                             ↓ (Data Binding Mechanism)
++---------------------------------------------------------+
+|             Data-Bound Controls (DataGridView)          |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                Screen Display / UI Output               |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> डेटाबेस से डेटा निकालकर डेटासेट में रखा जाता है, और बाइंडिंग मैकेनिज्म के जरिए उसे सीधे UI कंट्रोल्स (जैसे ग्रिडव्यू) पर प्रदर्शित किया जाता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>डेटा बाइंडिंग का उपयोग निम्नलिखित क्षेत्रों में किया जाता है:</p>
+    <ul>
+        <li>डेटाबेस की तालिकाओं (Tables) को सीधे डेस्कटॉप स्क्रीन पर ग्रिड के रूप में दिखाने में।</li>
+        <li>ड्रॉप-डाउन सूचियों (ComboBox) को डेटाबेस के मानों से स्वचालित रूप से भरने में।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>कोडिंग की मात्रा (Lines of code) में भारी कमी आती है क्योंकि लूप चलाकर डेटा दिखाने की जरूरत नहीं पड़ती।</li>
+        <li>यूजर इंटरफेस और डेटा स्रोत के बीच समन्वय बनाए रखना बहुत आसान हो जाता है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>बहुत बड़े डेटासेट को बाइंड करते समय मेमोरी और प्रदर्शन पर हल्का प्रभाव पड़ सकता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Simple Binding बनाम Complex Binding (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>सिंपल बाइंडिंग (Simple Binding)</th>
+            <th>कॉम्प्लेक्स बाइंडिंग (Complex Binding)</th>
+        </tr>
+        <tr>
+            <td>प्रयुक्त कंट्रोल्स</td>
+            <td>TextBox, Label आदि (एकल मान के लिए)।</td>
+            <td>DataGridView, ListBox, ComboBox आदि (सूचियों के लिए)।</td>
+        </tr>
+        <tr>
+            <td>डेटा मात्रा</td>
+            <td>यह केवल एक समय में एक वैल्यू को जोड़ती है।</td>
+            <td>यह एक साथ पंक्तियों (Rows) और स्तंभों के समूह को जोड़ती है।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में DataGridView पर डेटा बाइंड करने का एक संक्षिप्त उदाहरण नीचे प्रस्तुत है:</p>
+    <code>
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+public class BindingExample : Form {
+    private DataGridView dataGridView1;
+
+    public BindingExample() {
+        dataGridView1 = new DataGridView() { Dock = DockStyle.Fill };
+        this.Controls.Add(dataGridView1);
+        LoadData();
+    }
+
+    private void LoadData() {
+        string connString = "Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;";
+        using (SqlConnection conn = new SqlConnection(connString)) {
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Students", conn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            
+            // Complex Data Binding
+            dataGridView1.DataSource = dt;
+        }
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> डेटा बाइंडिंग डॉट-नेट एप्लिकेशनों में डेटाबेस और यूजर इंटरफेस को जोड़ने का सबसे प्रभावी और आधुनिक तरीका है।<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft .NET Data Binding and Windows Forms Controls Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit3_topic4.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <a href="unit3_topic6.html" class="btn">अगला टॉपिक (Next) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई III के इस नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
