@@ -404,7 +404,44 @@ End Namespace
     /* Yeh code aapke programming code aur tags ko English mein hi surakshit rakhega */
     pre, code, .badge, th, script, style, .no-translate {
         translate: no;
+    }<!-- Ultimate Permanent Hindi Translator Script for Mobile & Web -->
+<div id="google_translate_element" style="display:none;"></div>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'hi',
+            autoDisplay: false
+        }, 'google_translate_element');
+
+        // Automatic trigger for pure Hindi conversion
+        var triggerTranslation = setInterval(function () {
+            var selectField = document.querySelector('.goog-te-combo');
+            if (selectField) {
+                selectField.value = 'hi';
+                selectField.dispatchEvent(new Event('change'));
+                // Force dispatch for mobile browsers
+                var event = document.createEvent('HTMLEvents');
+                event.initEvent('change', true, true);
+                selectField.dispatchEvent(event);
+                clearInterval(triggerTranslation);
+            }
+        }, 100);
     }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<style>
+    /* Google ka top banner aur extra gap hatane ke liye */
+    .goog-te-banner-frame.skiptranslate { display: none !important; }
+    body { top: 0px !important; position: static !important; }
+    
+    /* Yeh code aapke programming code aur tags ko English mein hi surakshit rakhega */
+    pre, code, .badge, th, script, style, .no-translate {
+        translate: no;
+    }
+</style>
+
 </style>
 
 
