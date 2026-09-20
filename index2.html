@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई I: सीएलआर, जेआईटी, असेंबली और नेमस्पेस (CLR, JIT, Assemblies & Namespaces) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई I: सीएलआर, जेआईटी, असेंबली और नेमस्पेस</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>डॉट-नेट फ्रेमवर्क की आंतरिक कार्यप्रणाली को सुचारू रूप से चलाने के लिए कुछ अत्यंत महत्वपूर्ण घटकों का उपयोग किया जाता है, जिनमें <strong>CLR (Common Language Runtime)</strong>, <strong>JIT (Just-In-Time Compiler)</strong>, <strong>Assemblies</strong>, और <strong>Namespaces</strong> मुख्य हैं। ये सभी घटक मिलकर कोड के संकलन, सुरक्षा, स्मृति प्रबंधन और तार्किक संगठन को नियंत्रित करते हैं।</p>
+    <p>इन घटकों के बिना डॉट-नेट में किसी भी साफ्टवेयर का सुरक्षित और प्रभावी ढंग से निष्पादित होना असंभव है, क्योंकि यह रनटाइम पर्यावरण को पूरी ताकत प्रदान करते हैं.</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं घटक विवरण (Key Points & Components)</h2>
+    <ul>
+        <li><strong>CLR (कॉमन लैंग्वेज रनटाइम):</strong> यह डॉट-नेट का मुख्य निष्पादन इंजन है जो मेमोरी मैनेजमेंट, सुरक्षा जांच और थ्रेड प्रबंधन संभालता है।</li>
+        <li><strong>JIT कंपाइलर (जेआईटी कंपाइलर):</strong> यह मध्यवर्ती भाषा (MSIL) को ठीक उसी समय वास्तविक मशीन कोड में बदलता है जब प्रोग्राम चल रहा होता है।</li>
+        <li><strong>Assemblies (असेंबली):</strong> यह संकलित कोड का भौतिक पैकेज (जैसे .dll या .exe फाइल) होता है जिसमें मेटाडेटा और मेनिफेस्ट शामिल होते हैं।</li>
+        <li><strong>Namespaces (नेमस्पेस):</strong> यह कोड को तार्किक रूप से समूहीकृत करने का माध्यम है ताकि नामों का टकराव (Name Collision) रोका जा सके।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>CLR और JIT किस प्रकार源代码 को मशीन कोड में बदलते हैं, इसका विस्तृत प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Source Code (C#, VB.NET)               |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                 Language Compilers                      |
+|            (उत्पन्न करता है MSIL + Metadata)             |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|          Common Language Runtime (CLR) Engine           |
+|  +---------------------------------------------------+  |
+|  |           JIT (Just-In-Time) Compiler             |  |
+|  |           Garbage Collector (GC)                  |  |
+|  |           Exception & Security Manager            |  |
+|  +---------------------------------------------------+  |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                Native Machine Code (CPU)                |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> सोर्स कोड कंपाइल होकर MSIL बनता है, जो CLR के अंदर प्रवेश करता है। CLR का JIT कंपाइलर इसे प्रोसेसर के समझने योग्य मशीन कोड में रूपांतरિત करता है, जबकि गारबेज कलेक्टर मेमोरी साफ करता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>इन घटकों का उपयोग निम्नलिखित क्षेत्रों में साफ्टवेयर निर्माण के दौरान होता है:</p>
+    <ul>
+        <li>सुरक्षित मल्टी-थ्रेडेड सर्वर अनुप्रयोगों के विकास में।</li>
+        <li>मॉड्यूलर लाइब्रेरी निर्माण में जहाँ असेंबली रीयूजबिलिटी काम आती है।</li>
+        <li>बड़े पैमाने के एंटरप्राइज सॉफ्टवेयर जहां नेविगेशन और नेमस्पेस प्रबंधन जरूरी होता है।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limitations)</h2>
+    
+    <h3>लाभ (Pros / Advantages):</h3>
+    <ul>
+        <li>JIT कंपाइलर के कारण कोड निष्पादन की गति अत्यधिक अनुकूलित और तेज होती है।</li>
+        <li>असेंबली वर्जनिंग के कारण 'DLL Hell' (संस्करण संघर्ष) की समस्या समाप्त होती है।</li>
+        <li>नेमस्पेस के उपयोग से कोड को प्रबंधित करना और पढ़ना बहुत आसान हो जाता है।</li>
+    </ul>
+
+    <h3>हानियां एवं सीमाएं (Cons & Limits):</h3>
+    <ul>
+        <li>पहली बार JIT संकलन होने के कारण प्रोग्राम शुरू होने में हल्का सा विलम्ब (Warm-up time) हो सकता है।</li>
+        <li>CLR की उपस्थिति के कारण सिस्टम पर थोड़ा अतिरिक्त संसाधन भार पड़ता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: CLR, JIT, Assembly और Namespace (Comparison)</h2>
+    <table>
+        <tr>
+            <th>घटक का नाम</th>
+            <th>प्रकार / रूप</th>
+            <th>मुख्य कार्य</th>
+        </tr>
+        <tr>
+            <td>CLR</td>
+            <td>सॉफ्टवेयर रनटाइम इंजन</td>
+            <td>स्मृति प्रबंधन, सुरक्षा और कोड का समग्र नियंत्रण।</td>
+        </tr>
+        <tr>
+            <td>JIT Compiler</td>
+            <td>संकलन तंत्र (Compiler)</td>
+            <td>MSIL कोड को रनटाइम पर मशीन कोड में बदलना।</td>
+        </tr>
+        <tr>
+            <td>Assembly</td>
+            <td>भौतिक फाइल (.dll / .exe)</td>
+            <td>संकليत कोड और मेटाडेटा को पैकेज के रूप में रखना।</td>
+        </tr>
+        <tr>
+            <td>Namespace</td>
+            <td>तार्किक समूहीकरण (Logical Grouping)</td>
+            <td>क्लासों और विधियों के नाम टकराने से बचाना।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Summary -->
+    <h2>7. सारांश (Summary)</h2>
+    <p>निष्कर्ष के रूप में, CLR, JIT, Assemblies और Namespaces डॉट-नेट फ्रेमवर्क के वे आधार स्तंभ हैं जो इसे अत्यधिक सुरक्षित, तीव्र और व्यवस्थित बनाते हैं। परीक्षा की दृष्टि से यह सबसे महत्वपूर्ण वैचारिक प्रश्नों में से एक है।</p>
+
+    <!-- 8. References -->
+    <h2>8. संदर्भ (References)</h2>
+    <ul>
+        <li>Microsoft .NET Runtime and CLR Internals Documentation</li>
+        <li>CASC-14T .NET Programming Syllabus (BCA V Semester)</li>
+        <li>Advanced .NET Framework Architecture Textbooks</li>
+    </ul>
+
+    <!-- Action Bar: PDF Download & Next Page Link -->
+    <div class="action-bar">
+        <button class="btn" onclick="window.print();">📥 PDF डाउनलोड करें (Print / Save)</button>
+        <span style="font-style: italic; color: #555;">(अगला टॉपिक आपकी अनुमति के बाद खुलेगा)</span>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
