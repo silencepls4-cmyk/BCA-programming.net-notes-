@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई IV: ASP.NET वेब फॉर्म्स में स्टेट मैनेजमेंट (State Management in ASP.NET) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई IV: ASP.NET वेब फॉर्म्स में स्टेट मैनेजमेंट</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>इंटरनेट पर प्रयुक्त होने वाला HTTP प्रोटोकॉल स्वाभाविक रूप से <strong>Stateless (स्टेटलेस)</strong> होता है, जिसका अर्थ है कि सर्वर प्रत्येक नए अनुरोध (Request) को पूरी तरह स्वतंत्र रूप से देखता है और पिछले अनुरोध का कोई डेटा याद नहीं रखता।</p>
+    <p>चूंकि एक वेब एप्लीकेशन (जैसे शॉपिंग कार्ट या यूजर लॉगिन) में उपयोगकर्ता के डेटा को पेज दर पेज याद रखना आवश्यक होता है, इसलिए ASP.NET में <strong>State Management (स्टेट मैनेजमेंट)</strong> तकनीक का उपयोग किया जाता है। यह उपयोगकर्ता के सत्र (Session) और मानों को सुरक्षित रखने का माध्यम है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं प्रकार (Key Points & Types of State Management)</h2>
+    <p>स्टेट मैनेजमेंट मुख्य रूप से दो श्रेणियों में बंटा होता है:</p>
+    <ul>
+        <li><strong>Client-Side State Management (क्लाइंट-साइड):</strong> डेटा उपयोगकर्ता के ब्राउज़र पर सुरक्षित रहता है।
+            <ul>
+                <li><strong>ViewState:</strong> एक ही वेब पेज पर कंट्रोल्स के मान को बनाए रखने के लिए।</li>
+                <li><strong>Cookies:</strong> छोटे टेक्स्ट फाइलें जो यूजर की मशीन पर स्टोर होती हैं।</li>
+                <li><strong>Hidden Fields & Query Strings:</strong> यूआरएल या छिपे हुए फॉर्म फील्ड के जरिए डेटा भेजना।</li>
+            </ul>
+        </li>
+        <li><strong>Server-Side State Management (सर्वर-साइड):</strong> डेटा वेब सर्वर पर सुरक्षित रहता है (अधिक सुरक्षित)।
+            <ul>
+                <li><strong>Session State:</strong> विशिष्ट उपयोगकर्ता के सत्र के दौरान डेटा याद रखने के लिए।</li>
+                <li><strong>Application State:</strong> एप्लीकेशन के सभी यूजर्स के लिए साझा डेटा स्टोर करने के लिए।</li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>क्लाइंट-साइड और सर्वर-साइड स्टेट मैनेजमेंट की कार्यप्रणाली का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Client Browser Request                 |
++---------------------------------------------------------+
+             /                                   \
+  (Client-Side Storage)                   (Server-Side Storage)
+     /                                               \
++-----------------------+                   +-----------------------+
+|  ViewState / Cookies  |                   | Session / Application |
+|  (Stored in Browser)  |                   |  (Stored on Server)   |
++-----------------------+                   +-----------------------+
+             \                                       /
+              v                                     v
++---------------------------------------------------------+
+|               Data Persistence Across Pages             |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> क्लाइंट-साइड तकनीकें ब्राउज़र में डेटा रखती हैं जबकि सर्वर-साइड तकनीकें सर्वर की मेमोरी में डेटा सुरक्षित करती हैं ताकि पेजों के बीच बदलाव होने पर जानकारी खो न जाए।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>स्टेट मैनेजमेंट का उपयोग निम्नलिखित क्षेत्रों में किया जाता है:</p>
+    <ul>
+        <li>ई-कॉमर्स वेबसाइटों में शॉपिंग कार्ट (Shopping Cart) के उत्पादों को सुरक्षित रखने में।</li>
+        <li>यूजर लॉगिन सत्र (Login Session Management) और सुरक्षा नियंत्रण में।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    <h3>लाभ (Pros / Advantages):</h3>
+    <ul>
+        <li>उपयोगकर्ता को एक सहज और निरंतर अनुभव मिलता है क्योंकि बार-बार लॉगिन या डेटा भरने की आवश्यकता नहीं पड़ती।</li>
+        <li>सर्वर-साइड विकल्प अत्यधिक सुरक्षित होते हैं।</li>
+    </ul>
+
+    <h3>हानियां एवं सीमाएं (Cons & Limits):</h3>
+    <ul>
+        <li>सर्वर पर अत्यधिक Session डेटा रखने से सर्वर की मेमोरी (RAM) पर दबाव पड़ सकता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: ViewState बनाम Session State (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>ViewState (व्यू-स्टेट)</th>
+            <th>Session State (सession स्टेट)</th>
+        </tr>
+        <tr>
+            <td>संग्रहण स्थान (Storage)</td>
+            <td>यह क्लाइंट ब्राउज़र (Hidden field के रूप में) पर रहता है।</td>
+            <td>यह पूरी तरह वेब सर्वर की मेमोरी में सुरक्षित रहता है।</td>
+        </tr>
+        <tr>
+            <td>दायरा (Scope)</td>
+            <td>यह केवल **एक ही पेज** तक सीमित होता है।</td>
+            <td>यह पूरे **एप्लीकेशन सत्र** (कई पेजों) के लिए उपलब्ध होता है।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में Session का उपयोग करके डेटा स्टोर और रिट्रीव करने का एक संक्षिप्त उदाहरण नीचे प्रस्तुत है:</p>
+    <code>
+using System;
+using System.Web.UI;
+
+public partial class SessionExample : Page {
+    protected void btnSave_Click(object sender, EventArgs e) {
+        // Session में डेटा स्टोर करना
+        Session["UserName"] = txtName.Text;
+        lblMsg.Text = "डेटा सफलतापूर्वक सेशन में सहेज लिया गया है!";
+    }
+
+    protected void btnRead_Click(object sender, EventArgs e) {
+        // Session से डेटा पढ़ना
+        if (Session["UserName"] != null) {
+            lblMsg.Text = "नमस्ते, " + Session["UserName"].ToString();
+        } else {
+            lblMsg.Text = "सेशन समाप्त हो गया है या डेटा नहीं है।";
+        }
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> स्टेट मैनेजमेंट वेब एप्लिकेशनों की स्टेटलेस समस्या को दूर करके सुरक्षित और प्रभावी यूजर अनुभव प्रदान करता है。<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ASP.NET Web Forms State Management Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit3_topic6.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <a href="unit4_topic2.html" class="btn">अगला टॉपिक (Next) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई IV के इस नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
