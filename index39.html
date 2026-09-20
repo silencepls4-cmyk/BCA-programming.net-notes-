@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई IV: ASP.NET में कैशिंग और थीम्स (Caching and Themes) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: plugin;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई IV: कैशिंग और थीम्स (Caching & Themes in ASP.NET)</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>ASP.NET वेब एप्लिकेशनों के प्रदर्शन (Performance) और गति को बेहतर बनाने के लिए <strong>Caching (कैशिंग)</strong> एक अत्यंत शक्तिशाली तकनीक है। इसके माध्यम से बार-बार उपयोग होने वाले वेब पेजों या डेटाबेस के परिणामों को सर्वर की रैम (RAM) में अस्थायी रूप से स्टोर कर लिया जाता है, ताकि अगली बार अनुरोध आने पर डेटाबेस या सर्वर को दोबारा मेहनत न करनी पड़े और परिणाम तुरंत मिल जाए।</p>
+    <p>दूसरी ओर, <strong>Themes and CSS (थीम्स और कैस्केडिंग स्टाइल शीट्स)</strong> का उपयोग वेबसाइट के दृश्य रूप, रंगों, फॉन्ट और लेआउट को एकरूप और आकर्षक बनाने के लिए किया जाता है।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं प्रकार (Key Points & Types of Caching)</h2>
+    <ul>
+        <li><strong>Page Output Caching:</strong> पूरे वेब पेज के आउटपुट को सर्वर पर कैश कर लेता है ताकि बार-बार पेज री-रेंडर न हो।</li>
+        <li><strong>Partial Page Caching:</strong> पेज के केवल एक निश्चित हिस्से (User Control) को कैश करने की अनुमति देता है ( इसे Child Caching भी कहते हैं)।</li>
+        <li><strong>Data Caching:</strong> डेटाबेस से लाई गई महँगी क्वेरी या डेटा को सीधे मेमोरी में स्टोर करना।</li>
+        <li><strong>Themes & CSS:</strong> स्टाइल्स, स्किन फाइलों और CSS3 का उपयोग करके पूरी वेबसाइट की डिजाइनिंग को नियंत्रित करना।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>कैशिंग की कार्यप्रणाली का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Client Request for Page                |
++---------------------------------------------------------+
+                             ↓
+         [क्या पेज का आउटपुट कैश (Cache) में मौजूद है?]
+                     /                  \
+              (हाँ / Yes)            (ना / No)
+                 /                          \
++-------------------------------+  +--------------------------+
+|  Serve Directly from Memory   |  | Process Page & Save to   |
+|     (अत्यधिक तीव्र गति)        |  |    Cache Memory          |
++-------------------------------+  +--------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> जब कोई अनुरोध आता है, तो सिस्टम पहले कैश मेमोरी की जाँच करता है। यदि डेटा मिल जाता है तो उसे तुरंत परोस दिया जाता है, अन्यथा पेज को प्रोसेस करके कैश में सुरक्षित कर लिया जाता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>कैशिंग और थीम्स का उपयोग निम्नलिखित क्षेत्रों में होता है:</p>
+    <ul>
+        <li>न्यूज़ वेबसाइटों और ई-कॉमर्स पोर्टल्स पर जहाँ बार-बार एक ही डेटा लाखों यूजर्स द्वारा देखा जाता है।</li>
+        <li>वेबसाइटों के समग्र रूप और ब्रांडिंग को एकरूप (Consistent) रखने के लिए।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>सर्वर का लोड बहुत अधिक कम हो जाता है और वेबसाइट की गति (Response Time) कई गुना तेज हो जाती है।</li>
+        <li>बैंडविथ की बचत होती है और यूजर अनुभव शानदार बनता है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>यदि डेटाबेस में कोई नया बदलाव हुआ है और कैश समय पर एक्सपायर (Expire) नहीं हुआ, तो यूजर को पुराना डेटा दिखाई दे सकता है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Output Caching बनाम Data Caching (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>Output Caching (आउटपुट कैशिंग)</th>
+            <th>Data Caching (डेटा कैशिंग)</th>
+        </tr>
+        <tr>
+            <td>कैश होने वाली वस्तु</td>
+            <td>यह पूरे **वेब पेज या उसके हिस्से** के HTML आउटपुट को स्टोर करता है।</td>
+            <td>यह केवल **डेटा ऑब्जेक्ट्स** या डेटाटेबल को मेमोरी में रखता है।</td>
+        </tr>
+        <tr>
+            <td>मुख्य उद्देश्य</td>
+            <td>पेज रेंडरिंग के समय को बचाना।</td>
+            <td>डेटाबेस की भारी क्वेरी के भार को कम करना।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>ASP.NET पेज पर Output Cache निर्देश (Directive) का उपयोग करने का संक्षिप्त उदाहरण:</p>
+    <code>
+<%@ Page Language="C#" %>
+<%-- पेज के आउटपुट को 60 सेकंड के लिए कैश करना --%>
+<%@ OutputCache Duration="60" VaryByParam="none" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>कैशिंग का उदाहरण</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>यह पृष्ठ कैश मेमोरी से लोड किया गया है।</h2>
+            <p>वर्तमान समय: <%= DateTime.Now.ToString() %></p>
+        </div>
+    </form>
+</body>
+</html>
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> कैशिंग और थीम्स वेब एप्लिकेशनों के प्रदर्शन को बेहतर बनाने और उन्हें पेशेवर रूप देने के लिए अनिवार्य तकनीकें हैं। इसके साथ ही **इकाई IV के सभी शेष टॉपिक्स अब पूरी तरह से पूर्ण हो चुके हैं।**<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ASP.NET Caching and Themes Official Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit4_topic_prev.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <span class="btn" style="background-color: #555555; cursor: default;">इकाई IV पूर्णतः संपन्न (Unit IV Complete)</span>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई IV के सभी विषयों को पूरी तरह से पूर्ण करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
