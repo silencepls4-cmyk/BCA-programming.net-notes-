@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई IV (अंतिम उप-विषय): ट्रेसिंग, डिबगिंग और एरर हैंडलिंग - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई IV: ट्रेसिंग, डिबगिंग और एरर हैंडलिंग</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>ASP.NET वेब एप्लिकेशनों के विकास और रखरखाव के दौरान आने वाली अवांछित त्रुटियों (Errors) को खोजना, उनका विश्लेषण करना और उन्हें नियंत्रित करना सॉफ्टवेयर इंजीनियरिंग का सबसे महत्वपूर्ण हिस्सा है। <strong>Debugging (डिबगिंग)</strong> का अर्थ कोड के अंदर छिपी तार्किक या सिंटैक्स त्रुटियों को ढूँढकर सुधारना है, जबकि <strong>Tracing (ट्रेसिंग)</strong> का अर्थ रन-टाइम के दौरान पेज के निष्पादन विवरण, निष्पादन समय और चरों (Variables) के मानों पर नजर रखना है।</p>
+    <p>इसके साथ ही, <strong>Error Handling (एरर हैंडलिंग)</strong> यह सुनिश्चित करती है कि यदि साफ्टवेयर में कोई गंभीर त्रुटि आ जाए, तो प्रोग्राम अचानक क्रैश होने के बजाय उपयोगकर्ता को एक सुरक्षित और सुंदर संदेश दिखाए।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं घटक (Key Points & Features)</h2>
+    <ul>
+        <li><strong>Page-Level Tracing:</strong> विशिष्ट वेब पेज के निर्देश (Directive) में <code>Trace="true"</code> लिखकर पेज के निष्पादन की जानकारी देखना।</li>
+        <li><strong>Application-Level Tracing:</strong> <code>Web.config</code> फाइल के माध्यम से पूरे एप्लीकेशन के लिए ट्रेसिंग को सक्रिय करना।</li>
+        <li><strong>Custom Errors:</strong> जब कोई घातक त्रुटि (Fatal Error) आए, तो उपयोगकर्ता को तकनीकी कोड दिखाने के बजाय एक अनुकूलित त्रुटि पेज पर रीडायरेक्ट करना।</li>
+        <li><strong>Try-Catch-Finally:</strong> अपवादों (Exceptions) को नियंत्रित करने का संरचित तरीका।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>त्रुटि प्रबंधन और ट्रेसिंग की कार्यप्रणाली का प्रवाह आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  Web Page Execution                     |
++---------------------------------------------------------+
+                             ↓
+         [क्या निष्पादन के दौरान कोई त्रुटि (Error) आई?]
+                     /                  \
+              (हाँ / Yes)            (ना / No)
+                 /                          \
++-------------------------------+  +--------------------------+
+|  Captured by Try-Catch /      |  | Normal Execution &       |
+|  Redirect to Custom Error Page|  |  Page Trace Log Recorded |
++-------------------------------+  +--------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> कोड चलते समय यदि कोई त्रुटि आती है, तो उसे एरर हैंडलिंग तंत्र द्वारा पकड़ा जाता है या कस्टम एरर पेज पर भेजा जाता है, अन्यथा सामान्य ट्रेस लॉग तैयार होता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>ट्रेसिंग और एरर हैंडलिंग का उपयोग निम्नलिखित क्षेत्रों में होता है:</p>
+    <ul>
+        <li>उत्पादन (Production) वातावरण में लाइव वेबसाइट की त्रुटियों को सुरक्षित रूप से ट्रैक करने में।</li>
+        <li>विकास (Development) चरण के दौरान कोड की गति और समस्याओं का विश्लेषण करने के लिए।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>त्रुटियों की सटीक जड़ तक पहुँचना आसान हो जाता है, जिससे डिबगिंग का समय बचता है।</li>
+        <li>उपयोगकर्ता को सिस्टम की आंतरिक तकनीकी जानकारी नहीं दिखती, जिससे सुरक्षा बनी रहती है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>उत्पादन सर्वर पर हमेशा ट्रेसिंग चालू रखने से सुरक्षा जोखिम और प्रदर्शन में गिरावट आ सकती है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: Tracing बनाम Debugging (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>Tracing (ट्रेसिंग)</th>
+            <th>Debugging (डिबगिंग)</th>
+        </tr>
+        <tr>
+            <td>मुख्य उद्देश्य</td>
+            <td>रन-टाइम के दौरान पेज के निष्पादन के आंकड़े और लॉग देखना।</td>
+            <td>कोड की तार्किक त्रुटियों को रोककर स्टेप-बाय-स्टेप विश्लेषण करना।</td>
+        </tr>
+        <tr>
+            <td>उत्पादन उपयोग</td>
+            <td>इसे सीमित समय के लिए लाइव सर्वर पर भी देखा जा सकता है।</td>
+            <td>यह मुख्य रूप से विकास (Development) चरण में उपयोग होता है।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>ASP.NET में Web.config के जरिए Custom Errors को कॉन्फ़िगर करने का संक्षिप्त उदाहरण:</p>
+    <code>
+<!-- Web.config फाइल में Custom Errors विन्यास -->
+<configuration>
+    <system.web>
+        <customErrors mode="On" defaultRedirect="ErrorPage.aspx">
+            <error statusCode="404" redirect="FileNotFound.aspx" />
+        </customErrors>
+    </system.web>
+</configuration>
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> ट्रेसिंग, डिबगिंग और एरर हैंडलिंग किसी भी वेब एप्लीकेशन को स्थिर, सुरक्षित और उच्च गुणवत्ता वाला बनाने के अनिवार्य स्तंभ हैं। इसके साथ ही **इकाई IV का यह अंतिम उप-विषय भी पूरी तरह से संपन्न हो चुका है।**<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ASP.NET Tracing, Debugging and Error Handling Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous Topic Links -->
+    <div class="action-bar">
+        <a href="unit4_topic_prev.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <span class="btn" style="background-color: #555555; cursor: default;">इकाई IV पूर्णतः संपन्न (Unit IV Complete)</span>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और बीसीए पंचम सेमेस्टर की इकाई IV के सभी विषयों को पूरी तरह से पूर्ण करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+</html>
