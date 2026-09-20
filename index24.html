@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इकाई III: डेटाबेस कनेक्टिविटी और ADO.NET (Database Connectivity & ADO.NET) - विस्तृत नोट्स</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+            border-bottom: 3px solid #cc0000;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #333333;
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        h2 {
+            color: #cc0000;
+            font-size: 1.6rem;
+            margin-top: 45px;
+            margin-bottom: 15px;
+            border-left: 5px solid #cc0000;
+            padding-left: 12px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #cc0000;
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        p, li {
+            font-size: 1.05rem;
+            color: #111111;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #cc0000;
+        }
+        pre, code {
+            background: #f4f4f4;
+            color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 20px 0;
+            border: 1px solid #cccccc;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #000000;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #cc0000;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            background-color: #990000;
+        }
+        .pdf-btn {
+            background-color: #0000cc;
+        }
+        .pdf-btn:hover {
+            background-color: #000099;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9f9f9;
+            border: 1px dashed #cc0000;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #cc0000;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>इकाई III: डेटाबेस कनेक्टिविटी और ADO.NET</h1>
+    <div class="subtitle">बीसीए पंचम (V) सेमेस्टर • विषय: सीएएससी-14T (.NET Programming) • शत-प्रतिशत परीक्षा-उपयोगी विस्तृत नोट्स</div>
+
+    <!-- 1. Introduction & Definition -->
+    <h2>1. परिचय एवं परिभाषा (Introduction & Definition)</h2>
+    <p>डॉट-नेट फ्रेमवर्क के अंतर्गत डेटाबेस से संवाद स्थापित करने और सूचनाओं का आदान-प्रदान करने के लिए <strong>ADO.NET (ActiveX Data Objects .NET)</strong> का उपयोग किया जाता है। यह डेटा-एक्सेस घटकों का एक ऐसा समूह है जो डेवलपर्स को रिलेशनल डेटाबेस (जैसे SQL Server, MySQL) के साथ आसानी से जुड़ने, डेटा पढ़ने, लिखने और अपडेट करने की अनुमति देता है।</p>
+    <p>ADO.NET मुख्य रूप से दो मॉडलों पर काम करता है: **Connected Architecture** (डेटा रीडर के माध्यम से सीधा कनेक्शन) और **Disconnected Architecture** (डेटासेट और डेटा एडाप्टर के माध्यम से ऑफलाइन डेटा प्रबंधन)।</p>
+
+    <!-- 2. Key Points & Features -->
+    <h2>2. मुख्य बिंदु एवं घटक (Key Points & Components)</h2>
+    <ul>
+        <li><strong>Connection:</strong> डेटाबेस के साथ भौतिक संबंध स्थापित करता है (जैसे <code>SqlConnection</code>)।</li>
+        <li><strong>Command:</strong> डेटाबेस पर SQL क्वेरी या स्टोर्ड प्रक्रिया निष्पादित करता है (जैसे <code>SqlCommand</code>)।</li>
+        <li><strong>DataReader:</strong> डेटाबेस से केवल-पठनीय (Read-only) और तेज गति से डेटा पढ़ने का साधन है।</li>
+        <li><strong>DataAdapter & DataSet:</strong> डेटाबेस और मेमोरी के बीच सेतु का काम करता है ताकि बिना लगातार कनेक्शन के डेटा ऑफलाइन प्रोसेस किया जा सके।</li>
+    </ul>
+
+    <!-- 3. Architecture & Flowchart -->
+    <h2>3. वास्तुकला एवं प्रवाह आरेख (Architecture & Flowchart Diagram)</h2>
+    <p>ADO.NET की वास्तुकला और डेटा प्रवाह का आरेख नीचे दर्शाया गया है:</p>
+    <pre>
++---------------------------------------------------------+
+|                  C# Application Layer                   |
++---------------------------------------------------------+
+                             ↓
++---------------------------------------------------------+
+|                  ADO.NET Data Providers                 |
+|     [Connection] → [Command] → [DataReader / Adapter]   |
++---------------------------------------------------------+
+                             ↓ (Disconnected / Connected)
++---------------------------------------------------------+
+|                Database Server (SQL / MySQL)            |
++---------------------------------------------------------+
+    </pre>
+    <p><strong>आरेख विवरण (Diagram Description):</strong> एप्लीकेशन लेयर से डेटा प्रोवाइडर (Connection और Command) के जरिए डेटाबेस से संपर्क किया जाता है, और DataReader या DataSet के माध्यम से डेटा प्राप्त होता है।</p>
+
+    <!-- 4. Applications -->
+    <h2>4. अनुप्रयोग (Applications)</h2>
+    <p>ADO.NET का उपयोग निम्नलिखित क्षेत्रों में किया जाता है:</p>
+    <ul>
+        <li>डेस्कटॉप और वेब एप्लिकेशनों में उपयोगकर्ता डेटा को सुरक्षित रूप से स्टोर और रिट्रीव करने में।</li>
+        <li>बैंकिंग और ई-कॉमर्स सॉफ्टवेयर में बड़े पैमाने पर ट्रांजैक्शन प्रबंधन के लिए।</li>
+    </ul>
+
+    <!-- 5. Pros, Cons & Limits -->
+    <h2>5. लाभ, हानियां एवं सीमाएं (Pros, Cons & Limits)</h2>
+    
+    ### लाभ (Pros / Advantages):
+    <ul>
+        <li>डिसकनेक्टेड आर्किटेक्चर के कारण सर्वर पर लोड कम पड़ता है और नेटवर्क संसाधनों की बचत होती है।</li>
+        <li>यह विभिन्न प्रकार के डेटाबेस स्रोतों के साथ अत्यधिक अनुकूलनीय है।</li>
+    </ul>
+
+    ### हानियां एवं सीमाएं (Cons & Limits):
+    <ul>
+        <li>कच्चे एसक्यूएल (Raw SQL queries) के साथ काम करते समय कोडिंग जटिल हो सकती है।</li>
+    </ul>
+
+    <!-- 6. Comparison Table -->
+    <h2>6. तुलना तालिका: DataReader बनाम DataSet (Comparison)</h2>
+    <table>
+        <tr>
+            <th>तुलनात्मक बिंदु</th>
+            <th>DataReader (डेटा रीडर)</th>
+            <th>DataSet (डेटासेट)</th>
+        </tr>
+        <tr>
+            <td>आर्किटेक्चर</td>
+            <td>यह Connected Architecture पर आधारित है।</td>
+            <td>यह Disconnected Architecture पर आधारित है।</td>
+        </tr>
+        <tr>
+            <td>डेटा प्रकृति</td>
+            <td>केवल पढ़ने योग्य (Forward-only, Read-only)।</td>
+            <td>मेमोरी में डेटा की पूरी कॉपी (Offline cacheable)।</td>
+        </tr>
+    </table>
+
+    <!-- 7. Code Snippet Example -->
+    <h2>7. प्रोग्रामिंग कोड उदाहरण (Code Snippet)</h2>
+    <p>सी# भाषा में ADO.NET कनेक्शन और कमांड का एक संक्षिप्त उदाहरण नीचे प्रस्तुत है:</p>
+    <code>
+using System;
+using System.Data.SqlClient;
+
+class Program {
+    static void Main(string[] args) {
+        string connString = "Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;";
+        
+        using (SqlConnection conn = new SqlConnection(connString)) {
+            try {
+                conn.Open();
+                string query = "SELECT * FROM Users";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                
+                while (reader.Read()) {
+                    Console.WriteLine("User: " + reader["Username"].ToString());
+                }
+                reader.Close();
+            }
+            catch (Exception ex) {
+                Console.WriteLine("त्रुटि: " + ex.Message);
+            }
+        }
+    }
+}
+    </code>
+
+    <!-- 8. Summary & References -->
+    <h2>8. सारांश एवं संदर्भ (Summary & References)</h2>
+    <p><strong>सारांश:</strong> ADO.NET डॉट-नेट अनुप्रयोगों को डेटाबेस से जोड़ने और प्रबंधित करने का सबसे सशक्त और मानक माध्यम है।<br>
+    <strong>संदर्भ (References):</strong><br>
+    1. Microsoft ADO.NET Architecture and Data Access Guide.<br>
+    2. CASC-14T .NET Programming Syllabus (BCA V Semester).</p>
+
+    <!-- Action Bar: PDF Download & Previous/Next Topic Links -->
+    <div class="action-bar">
+        <a href="unit3_topic3.html" class="btn">← पिछला टॉपिक (Previous)</a>
+        <!-- PDF Download Button -->
+        <button class="btn pdf-btn" onclick="window.print();">📥 PDF डाउनलोड करें (Save / Print)</button>
+        <a href="unit3_topic5.html" class="btn">अगला टॉपिक (Next) →</a>
+    </div>
+
+    <!-- Thank You Section -->
+    <div class="thank-you">
+        🙏 Thank You for Visiting! (अध्ययन पोर्टल पर आने और इकाई III के इस नोट्स का उपयोग करने के लिए आपका बहुत-बहुत धन्यवाद)
+    </div>
+</div>
+
+</body>
+                                                                                   </html>
+  
