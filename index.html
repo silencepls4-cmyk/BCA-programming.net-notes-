@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming in .NET - Unit 1 Master Study Portal</title>
+    <style>
+        :root {
+            --bg-dark: #05070b;
+            --card-bg: #0f172a;
+            --primary: #38bdf8;
+            --secondary: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --border: #1e293b;
+            --accent: #f43f5e;
+            --code-bg: #090d16;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.9; margin: 0; padding: 20px; background-color: var(--bg-dark); color: var(--text-main); }
+        
+        header { background: linear-gradient(135deg, #0f172a, #1e293b); border: 1px solid var(--border); padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.7); }
+        h1, h2, h3 { color: var(--primary); }
+        header h1 { margin: 0; font-size: 2.3em; font-weight: 800; }
+        header p { color: var(--text-muted); font-size: 1.1em; margin-top: 8px; }
+
+        .portal-layout { display: flex; gap: 25px; flex-wrap: wrap; }
+        
+        .sidebar { flex: 1.3; min-width: 320px; background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; height: 85vh; overflow-y: auto; }
+        .sidebar h3 { color: var(--text-main); border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-top: 0; position: sticky; top: 0; background: var(--card-bg); z-index: 10; }
+        
+        .unit-group { font-size: 0.9em; font-weight: 700; color: var(--secondary); text-transform: uppercase; margin: 15px 0 8px 0; letter-spacing: 1px; border-left: 3px solid var(--secondary); padding-left: 8px; }
+        .topic-link { display: block; background: #05070b; color: var(--text-muted); padding: 12px 15px; margin: 6px 0; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.95em; border: 1px solid var(--border); transition: all 0.2s ease; cursor: pointer; }
+        .topic-link:hover, .topic-link.active { background: #38bdf815; color: var(--primary); border-color: var(--primary); padding-left: 18px; }
+
+        .main-panel { flex: 2.6; min-width: 320px; background: var(--card-bg); border: 1px solid var(--border); padding: 40px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.6); height: 85vh; overflow-y: auto; }
+
+        .content-box { display: none; }
+        .content-box.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .badge { background: #10b98120; color: var(--secondary); padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700; display: inline-block; margin-bottom: 15px; border: 1px solid var(--secondary); }
+        
+        /* GeeksforGeeks Style Dynamic Geometric Flowcharts (Rectangles, Hexagons, Diamonds with pulse animations) */
+        .gfg-flowchart-container { background: var(--code-bg); border: 2px solid var(--border); padding: 25px; border-radius: 12px; text-align: center; margin: 25px 0; }
+        .flow-step { background: #1e293b; border: 2px solid var(--primary); padding: 12px 20px; border-radius: 8px; display: inline-block; font-weight: bold; color: var(--primary); margin: 8px 0; animation: glowPulse 2s infinite alternate; box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
+        .flow-diamond { background: #064e3b; border: 2px solid var(--secondary); padding: 12px 20px; transform: rotate(0deg); display: inline-block; font-weight: bold; color: #34d399; margin: 10px 0; border-radius: 6px; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .flow-arrow { font-size: 1.5em; color: var(--accent); margin: 5px 0; font-weight: bold; }
+        @keyframes glowPulse { from { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); } to { box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); } }
+
+        .live-code-box { background: var(--code-bg); border: 1px solid var(--border); border-left: 4px solid var(--secondary); padding: 18px; border-radius: 6px; font-family: 'Courier New', Courier, monospace; color: #34d399; margin: 20px 0; overflow-x: auto; white-space: pre-wrap; font-size: 0.95em; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0; }
+        .card-sub { background: var(--code-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+        .card-sub h4 { margin-top: 0; color: var(--secondary); font-size: 1.1em; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+
+        ul { margin: 12px 0; padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 10px; font-size: 1em; }
+        li strong { color: var(--text-main); }
+
+        .action-bar { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .btn { display: inline-block; padding: 12px 25px; background: var(--primary); color: #05070b; text-decoration: none; border-radius: 6px; font-weight: 700; border: none; cursor: pointer; }
+        .pdf-btn { background: var(--secondary); color: #fff; }
+
+        .creator-tag { margin-top: 25px; font-style: italic; color: var(--accent); text-align: center; font-size: 1.1em; font-weight: bold; }
+    </style>
+    <script>
+        function loadTopic(topicId) {
+            var boxes = document.getElementsByClassName('content-box');
+            for (let box of boxes) box.classList.remove('active');
+            
+            var links = document.getElementsByClassName('topic-link');
+            for (let link of links) link.classList.remove('active');
+            
+            document.getElementById(topicId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Programming in .NET (CASC-14T)</h1>
+        <p>BCA V Semester - Ultimate Master Notes Portal (100% Exam Guaranteed Content)</p>
+    </header>
+
+    <div class="portal-layout">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h3>Unit 1 Detailed Index</h3>
+            <div class="unit-group">Core Topics</div>
+            <a class="topic-link active" onclick="loadTopic('t1')">1. Overview of .NET Framework</a>
+            <a class="topic-link" onclick="loadTopic('t2')">2. Features and Architecture</a>
+            <a class="topic-link" onclick="loadTopic('t3')">3. Managed Execution Process</a>
+        </div>
+
+        <!-- Main Content Display Panel -->
+        <div class="main-panel">
+            
+            <!-- TOPIC 1 -->
+            <div id="t1" class="content-box active">
+                <span class="badge">UNIT 1 // TOPIC 1: IN-DEPTH STUDY</span>
+                <h2>Overview of .NET Framework</h2>
+                
+                <p><strong>Definition (परिभाषा):</strong> .NET Framework माइक्रोसॉफ्ट (Microsoft) द्वारा विकसित किया गया एक व्यापक (Comprehensive) और शक्तिशाली सॉफ्टवेयर विकास मंच (Software Development Platform) है। यह विभिन्न प्रकार के एप्लीकेशन (जैसे विंडोज डेस्कटॉप, वेब आधारित वेबसाइटें, और मोबाइल सर्विस) को सुरक्षित, तेज और आसानी से विकसित करने तथा चलाने के लिए एक एकीकृत (Unified) रनटाइम वातावरण प्रदान करता है।</p>
+                
+                <h3>Detailed Explanation & Core Concepts (विस्तृत स्पष्टीकरण):</h3>
+                <p>इस फ्रेमवर्क का मुख्य उद्देश्य डेवलपर्स को कोडिंग की जटिल संरचनाओं से मुक्त करना है। इसमें हजारों पहले से निर्मित क्लासेज और मेथड्स का एक विशाल संग्रह होता है जिसे <strong>Framework Class Library (FCL)</strong> कहा जाता है। इसके जरिए डेटाबेस कनेक्टिविटी, फाइल हैंडलिंग, और यूजर इंटरफेस डिजाइन करना बेहद आसान हो जाता है।</p>
+
+                <!-- GeeksforGeeks Style Dynamic Geometric Flowchart -->
+                <div class="gfg-flowchart-container">
+                    <h4 style="color: var(--primary); margin-top:0;">Dynamic Structural Flowchart</h4>
+                    <div class="flow-step">[ User Source Code (C# / VB.NET) ]</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-diamond">&lt; FCL &amp; Base Class Library &gt;</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step">[ CLR Execution Engine &amp; Memory Management ]</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step">[ Operating System / Hardware Interaction ]</div>
+                </div>
+
+                <h3>Live Executable Code Implementation:</h3>
+                <div class="live-code-box">
+Imports System
+
+Module OverviewDemo
+    Sub Main()
+        ' Displaying Framework Information in Console
+        Console.WriteLine("--- .NET Framework Overview Demo ---")
+        Console.WriteLine("OS Version: " & Environment.OSVersion.ToString())
+        Console.WriteLine("Machine Name: " & Environment.MachineName)
+        Console.ReadLine()
+    End Sub
+End Module
+                </div>
+
+                <div class="grid-2">
+                    <div class="card-sub">
+                        <h4>Advantages & Characteristics (लाभ व विशेषताएँ)</h4>
+                        <ul>
+                            <li><strong>Cross-Language Integration:</strong> विभिन्न भाषाओं का एक साथ सहज प्रयोग।</li>
+                            <li><strong>Automatic Memory Management:</strong> गार्बेज कलेक्टर द्वारा स्वतः मेमोरी साफ होना।</li>
+                            <li><strong>Robust Security:</strong> कोड की सुरक्षा और एक्सेस राइट्स का कड़ा नियंत्रण।</li>
+                        </ul>
+                    </div>
+                    <div class="card-sub">
+                        <h4>Disadvantages & Limitations (हानि व सीमाएँ)</h4>
+                        <ul>
+                            <li><strong>Memory Overhead:</strong> शुरुआती अवस्था में यह भारी मात्रा में रैम (RAM) खपत करता है।</li>
+                            <li><strong>Platform Dependency:</strong> क्लासिक .NET मुख्य रूप से विंडोज आधारित प्रणालियों के लिए डिजाइन किया गया था।</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-sub" style="margin-top: 20px;">
+                    <h4>Real-life Practical Example (वास्तविक जीवन उदाहरण):</h4>
+                    <p>जिस प्रकार एक आधुनिक स्मार्ट सिटी में पानी, बिजली, सुरक्षा और परिवहन की केंद्रीय व्यवस्था (Infrastructure) पहले से तैयार होती है, और नागरिकों को केवल अपने घरों का निर्माण करना होता है; बिल्कुल उसी प्रकार .NET फ्रेमवर्क डेवलपर्स को बुनियादी ढांचा प्रदान करता है ताकि वे केवल अपने सॉफ्टवेयर के मुख्य लॉजिक पर ध्यान केंद्रित कर सकें।</p>
+                </div>
+            </div>
+
+            <!-- TOPIC 2 -->
+            <div id="t2" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 2: IN-DEPTH STUDY</span>
+                <h2>Features and Architecture</h2>
+                
+                <p><strong>Definition (परिभाषा):</strong> .NET Framework की वास्तुकला (Architecture) दो मुख्य स्तंभों—<strong>Common Language Runtime (CLR)</strong> और <strong>Framework Class Library (FCL)</strong> पर टिकी हुई है। इसकी वास्तुकला कोड को सुरक्षित तरीके से संकलित (Compile) और निष्पादित (Execute) करने के लिए डिजाइन की गई है।</p>
+                
+                <h3>Detailed Explanation & Structural Hierarchy (संरचनात्मक विवरण):</h3>
+                <p>वास्तुकला की शुरुआत डेवलपर के लिखे गए सोर्स कोड से होती है। यह कोड सबसे पहले संबंधित भाषा के कंपाइलर से गुजरकर मध्यवर्ती रूप में बदलता है और अंततः CLR के नियंत्रण में मशीन कोड में रूपांतरित होता है।</p>
+
+                <!-- Geometric Flowchart -->
+                <div class="gfg-flowchart-container">
+                    <h4 style="color: var(--primary); margin-top:0;">Architecture Layers Flowchart</h4>
+                    <div class="flow-step">1. Application Layer (C#, VB.NET, F#)</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-diamond">{ Framework Class Library - FCL }</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step">2. Common Language Runtime (CLR Engine)</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step">3. Operating System / Native Hardware</div>
+                </div>
+
+                <h3>Live Architecture Inspection Code:</h3>
+                <div class="live-code-box">
+' Checking Architecture details at runtime
+Dim is64Bit As Boolean = Environment.Is64BitOperatingSystem
+Console.WriteLine("Is 64-Bit OS Architecture: " & is64Bit)
+                </div>
+
+                <div class="grid-2">
+                    <div class="card-sub">
+                        <h4>Key Architectural Features (मुख्य विशेषताएँ)</h4>
+                        <ul>
+                            <li><strong>Interoperability:</strong> पुरानी और नई दोनों तकनीकों का मेल।</li>
+                            <li><strong>Scalability:</strong> छोटे डेस्कटॉप ऐप से लेकर बड़े एंटरप्राइज सॉफ्टवेयर तक समर्थन।</li>
+                            <li><strong>Simplified Deployment:</strong> 'Xcopy deployment' और असेंबली के जरिए आसान इंस्टॉलेशन।</li>
+                        </ul>
+                    </div>
+                    <div class="card-sub">
+                        <h4>Comparison Summary (तुलना सारांश)</h4>
+                        <p>पारंपरिक सी/सी++ (C/C++) की तुलना में .NET वास्तुकला मेमोरी लीक (Memory Leaks) की समस्या को स्वचालित रूप से समाप्त कर देती है, जिससे सॉफ्टवेयर की स्थिरता (Stability) बहुत बढ़ जाती है.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOPIC 3 -->
+            <div id="t3" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 3: IN-DEPTH STUDY</span>
+                <h2>Managed Execution Process</h2>
+                
+                <p><strong>Definition (परिभाषा):</strong> प्रबंधित निष्पादन प्रक्रिया (Managed Execution Process) .NET की वह मूल कार्यप्रणाली है जिसके अंतर्गत सोर्स कोड सीधे सीधे मशीन भाषा (Machine Code) में परिवर्तित न होकर, पहले मध्यवर्ती रूप (MSIL) में और तत्पश्चात CLR के पूर्ण नियंत्रण एवं सुरक्षा निरीक्षण के तहत निष्पादित होता है।</p>
+
+                <h3>Step-by-Step Execution Breakdown:</h3>
+                <ul>
+                    <li><strong>Step 1 (Source Code Creation):</strong> डेवलपर C# या VB.NET में कोड लिखता है।</li>
+                    <li><strong>Step 2 (Compilation to MSIL):</strong> भाषा-विशिष्ट कंपाइलर कोड को MSIL और Metadata में बदलता है।</li>
+                    <li><strong>Step 3 (JIT Compilation):</strong> रनटाइम पर JIT कंपाइलर MSIL को प्रोसेसर की मूल भाषा में बदलता है।</li>
+                </ul>
+
+                <!-- Geometric Flowchart -->
+                <div class="gfg-flowchart-container">
+                    <h4 style="color: var(--primary); margin-top:0;">Managed Execution Flowchart</h4>
+                    <div class="flow-step">[ Source Code (.cs / .vb) ]</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-diamond">&lt; Roslyn Compiler &gt;</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step">[ MSIL Bytecode + Metadata ]</div>
+                    <div class="flow-arrow">&darr;</div>
+                    <div class="flow-step">[ JIT Compilation &amp; CLR Control ]</div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card-sub">
+                        <h4>Pros & Cons (गुण व दोष)</h4>
+                        <ul>
+                            <li><strong>Pros:</strong> उच्च स्तर की सुरक्षा, टाइप सेफ्टी और मेमोरी सुरक्षा।</li>
+                            <li><strong>Cons:</strong> JIT कंपाइलर के कारण पहली बार रन होने में मामूली विलंब।</li>
+                        </ul>
+                    </div>
+                    <div class="card-sub">
+                        <h4>Real-life Analogy (वास्तविक जीवन उदाहरण)</h4>
+                        <ul>
+                            <li>जैसे किसी विदेशी दस्तावेज (Source Code) का अनुवादक पहले उसे एक सर्वमान्य अंतरराष्ट्रीय भाषा (MSIL) में बदलता है, और फिर स्थानीय अधिकारी (JIT) उसे पढ़कर समझता है।</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button class="btn" onclick="loadTopic('t1')">🏠 Home Start</button>
+                <button class="btn pdf-btn" onclick="window.print();">📥 Print / Export Master PDF Notes</button>
+            </div>
+
+            <div class="creator-tag">✨ Created by Palak Gupta</div>
+        </div>
+    </div>
+
+</body>
+</html>
