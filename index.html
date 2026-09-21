@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming in .NET (CASC-14T) - Complete Study Portal</title>
+    <style>
+        :root {
+            --bg-dark: #0a0f1d;
+            --card-bg: #111827;
+            --primary: #38bdf8;
+            --secondary: #10b981;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #1f2937;
+            --accent: #f43f5e;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.8; margin: 0; padding: 20px; background-color: var(--bg-dark); color: var(--text-main); }
+        
+        header { background: linear-gradient(135deg, #111827, #1f2937); border: 1px solid var(--border); padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1, h2, h3 { color: var(--primary); }
+        header h1 { margin: 0; font-size: 2.2em; font-weight: 800; }
+        header p { color: var(--text-muted); font-size: 1.1em; margin-top: 5px; }
+
+        .portal-layout { display: flex; gap: 25px; flex-wrap: wrap; }
+        
+        /* Sidebar Navigation */
+        .sidebar { flex: 1.2; min-width: 320px; background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; height: 85vh; overflow-y: auto; }
+        .sidebar h3 { color: var(--text-main); border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-top: 0; position: sticky; top: 0; background: var(--card-bg); z-index: 10; }
+        
+        .unit-group { font-size: 0.85em; font-weight: 700; color: var(--secondary); text-transform: uppercase; margin: 15px 0 8px 0; letter-spacing: 1px; border-left: 3px solid var(--secondary); padding-left: 8px; }
+        .topic-link { display: block; background: #0a0f1d; color: var(--text-muted); padding: 10px 12px; margin: 5px 0; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.9em; border: 1px solid var(--border); transition: all 0.2s ease; cursor: pointer; }
+        .topic-link:hover, .topic-link.active { background: #38bdf815; color: var(--primary); border-color: var(--primary); padding-left: 16px; }
+
+        /* Main Content Display Panel */
+        .main-panel { flex: 2.5; min-width: 320px; background: var(--card-bg); border: 1px solid var(--border); padding: 35px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.4); height: 85vh; overflow-y: auto; }
+
+        .content-box { display: none; }
+        .content-box.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .badge { background: #10b98120; color: var(--secondary); padding: 5px 10px; border-radius: 20px; font-size: 0.8em; font-weight: 700; display: inline-block; margin-bottom: 12px; border: 1px solid var(--secondary); }
+        
+        .flowchart-card { background: #0a0f1d; border: 1px dashed var(--primary); padding: 15px; border-radius: 8px; text-align: center; font-family: monospace; font-weight: bold; color: var(--primary); margin: 15px 0; font-size: 0.95em; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .card-sub { background: #0a0f1d; padding: 15px; border-radius: 8px; border: 1px solid var(--border); }
+        .card-sub h4 { margin-top: 0; color: var(--secondary); font-size: 1em; }
+
+        ul { margin: 10px 0; padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 6px; font-size: 0.95em; }
+        li strong { color: var(--text-main); }
+
+        .action-bar { margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .btn { display: inline-block; padding: 10px 20px; background: var(--primary); color: #0a0f1d; text-decoration: none; border-radius: 6px; font-weight: 700; border: none; cursor: pointer; }
+        .pdf-btn { background: var(--secondary); color: #fff; }
+
+        .creator-tag { margin-top: 20px; font-style: italic; color: var(--accent); text-align: center; font-size: 1em; font-weight: bold; }
+    </style>
+    <script>
+        function loadTopic(topicId) {
+            var boxes = document.getElementsByClassName('content-box');
+            for (let box of boxes) box.classList.remove('active');
+            
+            var links = document.getElementsByClassName('topic-link');
+            for (let link of links) link.classList.remove('active');
+            
+            document.getElementById(topicId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Programming in .NET (CASC-14T)</h1>
+        <p>BCA V Semester - Complete Detailed Study Notes Portal</p>
+    </header>
+
+    <div class="portal-layout">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h3>Syllabus Index</h3>
+            
+            <div class="unit-group">Unit I: Introduction to .NET</div>
+            <a class="topic-link active" onclick="loadTopic('t1')">1. Overview & Architecture</a>
+            <a class="topic-link" onclick="loadTopic('t2')">2. Managed Execution & CLR</a>
+            <a class="topic-link" onclick="loadTopic('t3')">3. Common Language Specification (CLS)</a>
+            <a class="topic-link" onclick="loadTopic('t4')">4. JIT Compilation & MSIL</a>
+            <a class="topic-link" onclick="loadTopic('t5')">5. Namespace, Assemblies & Metadata</a>
+            <a class="topic-link" onclick="loadTopic('t6')">6. System & Common Type System (CTS)</a>
+            <a class="topic-link" onclick="loadTopic('t7')">7. Visual & Event-Driven Programming</a>
+            <a class="topic-link" onclick="loadTopic('t8')">8. Cross-Language Interoperability & GC</a>
+
+            <div class="unit-group">Unit II: .NET Framework & Windows Forms</div>
+            <a class="topic-link" onclick="loadTopic('t9')">9. Visual Studio IDE & .NET Solution</a>
+            <a class="topic-link" onclick="loadTopic('t10')">10. MDI Applications</a>
+            <a class="topic-link" onclick="loadTopic('t11')">11. Components and Controls</a>
+            <a class="topic-link" onclick="loadTopic('t12')">12. Data Types & Variables</a>
+            <a class="topic-link" onclick="loadTopic('t13')">13. Type Conversions & Operators</a>
+            <a class="topic-link" onclick="loadTopic('t14')">14. Methods, Events & Scope</a>
+            <a class="topic-link" onclick="loadTopic('t15')">15. Creating Enumerations</a>
+
+            <div class="unit-group">Unit III: Control Structures & GUI</div>
+            <a class="topic-link" onclick="loadTopic('t16')">16. Conditional Statements & Loops</a>
+            <a class="topic-link" onclick="loadTopic('t17')">17. Arrays & Types of Methods</a>
+            <a class="topic-link" onclick="loadTopic('t18')">18. Sub Procedures & Functions</a>
+            <a class="topic-link" onclick="loadTopic('t19')">19. Exception Handling (Try, Catch, Finally, Throw)</a>
+            <a class="topic-link" onclick="loadTopic('t20')">20. GUI Window Forms (Showing & Hiding)</a>
+            <a class="topic-link" onclick="loadTopic('t21')">21. Basic Controls (Textbox, Label, Button)</a>
+            <a class="topic-link" onclick="loadTopic('t22')">22. Selection Controls (List, Combo, Check, Radio)</a>
+            <a class="topic-link" onclick="loadTopic('t23')">23. Containers, Scrollbar & Timer</a>
+            <a class="topic-link" onclick="loadTopic('t24')">24. Dialog Boxes (Open, Save, Print, Font, Color)</a>
+            <a class="topic-link" onclick="loadTopic('t25')">25. Menus, Sub-menus, Msgbox & Inputbox</a>
+
+            <div class="unit-group">Unit IV: ADO.NET Database</div>
+            <a class="topic-link" onclick="loadTopic('t26')">26. ADO.NET Architecture & Data Providers</a>
+            <a class="topic-link" onclick="loadTopic('t27')">27. Dataset Components & Server Explorer</a>
+            <a class="topic-link" onclick="loadTopic('t28')">28. Data Adapters & Data Readers</a>
+            <a class="topic-link" onclick="loadTopic('t29')">29. Command Objects & Database Apps</a>
+            <a class="topic-link" onclick="loadTopic('t30')">30. Data Bind Controls & Grid Display</a>
+        </div>
+
+        <!-- Main Content Display Panel -->
+        <div class="main-panel">
+            
+            <!-- TOPIC 1 -->
+            <div id="t1" class="content-box active">
+                <span class="badge">UNIT I // ARCHITECTURE</span>
+                <h2>Overview & Architecture</h2>
+                <p><strong>Definition (परिभाषा):</strong> The .NET Framework ek aesa software development platform hai jise Microsoft ne banaya hai. Yeh applications ko banane aur run karne ke liye ek surakshit aur unified environment provide karta hai.</p>
+                
+                <h3>Architecture & Structure (संरचना):</h3>
+                <p>Isme do mukhya bhaag hote hain: CLR (execution engine) aur FCL (classes ka sangrah).</p>
+
+                <div class="flowchart-card">
+                    [User Application] &rarr; [.NET Framework Class Library] &rarr; [CLR Execution Engine] &rarr; [Operating System]
+                </div>
+
+                <div class="grid-2">
+                    <div class="card-sub">
+                        <h4>Advantages (लाभ)</h4>
+                        <ul>
+                            <li>Alag-alag languages ek sath kaam kar sakti hain.</li>
+                            <li>Memory ka management automatic hota hai.</li>
+                        </ul>
+                    </div>
+                    <div class="card-sub">
+                        <h4>Disadvantages (हानि)</h4>
+                        <ul>
+                            <li>Shuruat mein system par thoda load padta hai.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p><strong>Real-life Example (वास्तविक जीवन उदाहरण):</strong> Jaise ek bada shopping mall alag-alag dukano (modules) ko ek hi chhat ke niche chalata hai, waise hi .NET framework alag programs ko ek platform deta hai.</p>
+            </div>
+
+            <!-- TOPIC 2 -->
+            <div id="t2" class="content-box">
+                <span class="badge">UNIT I // RUNTIME</span>
+                <h2>Managed Execution Process & CLR</h2>
+                <p><strong>Definition (परिभाषा):</strong> Common Language Runtime (CLR) .NET ka main execution engine hai jo code ko run karta hai aur memory, security, aur errors ko control karta hai.</p>
+                <div class="flowchart-card">
+                    [Source Code] &rarr; [Managed Execution via CLR] &rarr; [Native Machine Code Execution]
+                </div>
+            </div>
+
+            <!-- TOPIC 3 -->
+            <div id="t3" class="content-box">
+                <span class="badge">UNIT I // SPECIFICATIONS</span>
+                <h2>Common Language Specification (CLS)</h2>
+                <p><strong>Definition (परिभाषा):</strong> CLS rules ka ek aesa set hai jo yeh pakka karta hai ki ek language mein likha gaya code dusri language mein bina kisi samasya ke chal sake.</p>
+            </div>
+
+            <!-- TOPIC 4 -->
+            <div id="t4" class="content-box">
+                <span class="badge">UNIT I // COMPILATION</span>
+                <h2>JIT Compilation & MSIL</h2>
+                <p><strong>Definition (परिभाषा):</strong> Source code pehle Microsoft Intermediate Language (MSIL) mein badalta hai, aur jab program chalta hai tab Just-In-Time (JIT) compiler ise computer ki bhasha (Machine Code) mein convert karta hai.</p>
+                <div class="flowchart-card">
+                    [Source Code] &rarr; [MSIL Code] &rarr; [JIT Compiler] &rarr; [Machine Code]
+                </div>
+            </div>
+
+            <!-- TOPIC 5 -->
+            <div id="t5" class="content-box">
+                <span class="badge">UNIT I // ORGANIZATION</span>
+                <h2>Namespace, Assemblies & Metadata</h2>
+                <p><strong>Definition (परिभाषा):</strong> Namespaces code ko saaf-suthra aur organized rakhte hain, Assemblies (.dll/.exe) code ki packing aur deployment karti hain, aur Metadata type ki puri jaankari store karti hain.</p>
+            </div>
+
+            <!-- TOPIC 6 -->
+            <div id="t6" class="content-box">
+                <span class="badge">UNIT I // TYPES</span>
+                <h2>System & Common Type System (CTS)</h2>
+                <p><strong>Definition (परिभाषा):</strong> CTS ek aesa standard system hai jo yeh tay karta hai ki sabhi .NET languages mein data types ek jaise tarike se kaise kaam karenge.</p>
+            </div>
+
+            <!-- TOPIC 7 -->
+            <div id="t7" class="content-box">
+                <span class="badge">UNIT I // PARADIGM</span>
+                <h2>Visual Development & Event-Driven Programming</h2>
+                <p><strong>Definition (परिभाषा):</strong> Visual development mein hum drag-and-drop karke design banate hain, aur Event-driven programming mein code tab chalta hai jab user koi action karta hai.</p>
+            </div>
+
+            <!-- TOPIC 8 -->
+            <div id="t8" class="content-box">
+                <span class="badge">UNIT I // MEMORY & INTEROP</span>
+                <h2>Cross-Language Interoperability & Garbage Collection</h2>
+                <p><strong>Definition (परिभाषा):</strong> Iske madhyam se alag languages ka code aapas mein judta hai, aur Garbage Collection (GC) bekar ki memory ko apne aap saaf kar deta hai.</p>
+            </div>
+
+            <!-- TOPIC 9 -->
+            <div id="t9" class="content-box">
+                <span class="badge">UNIT II // IDE</span>
+                <h2>Visual Studio IDE & Creating a .NET Solution</h2>
+                <p><strong>Definition (परिभाषा):</strong> Visual Studio ek software building workspace hai jahan hum apne programs likhte hain, aur Solution (.sln) hamari saari files ko ek sath jod kar rakhta hai.</p>
+            </div>
+
+            <!-- TOPIC 10 -->
+            <div id="t10" class="content-box">
+                <span class="badge">UNIT II // INTERFACE</span>
+                <h2>MDI Applications</h2>
+                <p><strong>Definition (परिभाषा):</strong> MDI (Multiple Document Interface) aisi applications hoti hain jisme ek main window ke andar choti-choti kai saari windows khul sakti hain.</p>
+            </div>
+
+            <!-- TOPIC 11 -->
+            <div id="t11" class="content-box">
+                <span class="badge">UNIT II // UI ELEMENTS</span>
+                <h2>Components and Controls</h2>
+                <p><strong>Definition (परिभाषा):</strong> Controls screen par dikhne wale visual parts hain, aur components background mein bina dikhe kaam karne wali classes hain.</p>
+            </div>
+
+            <!-- TOPIC 12 -->
+            <div id="t12" class="content-box">
+                <span class="badge">UNIT II // BASICS</span>
+                <h2>Data Types & Variable</h2>
+                <p><strong>Definition (परिभाषा):</strong> Variables data ko save karne ke dabbe hain, aur Data Types yeh batate hain ki us dabbe mein kis kis tarah ka data rakha jayega.</p>
+            </div>
+
+            <!-- TOPIC 13 -->
+            <div id="t13" class="content-box">
+                <span class="badge">UNIT II // OPERATIONS</span>
+                <h2>Type Conversions & Operators</h2>
+                <p><strong>Definition (परिभाषा):</strong> Type conversion ek data type ko dusre mein badalta hai, aur operators ganitiye aur logical ganana karte hain.</p>
+            </div>
+
+            <!-- TOPIC 14 -->
+            <div id="t14" class="content-box">
+                <span class="badge">UNIT II // FUNCTIONS & EVENTS</span>
+                <h2>Methods, Events & Scope of Variables</h2>
+                <p><strong>Definition (परिभाषा):</strong> Methods code ke tukde hain jo kaam karte hain, events user ki harkat ko pakadte hain, aur scope yeh batata hai ki variable kahan tak istemal ho sakta hai.</p>
+            </div>
+
+            <!-- TOPIC 15 -->
+            <div id="t15" class="content-box">
+                <span class="badge">UNIT II // CONSTANTS</span>
+                <h2>Creating Enumerations</h2>
+                <p><strong>Definition (परिभाषा):</strong> Enumeration (Enum) ek user-defined list hoti hai jisme fixed names ko numbers diye jaate hain.</p>
+            </div>
+
+            <!-- TOPIC 16 -->
+            <div id="t16" class="content-box">
+                <span class="badge">UNIT III // CONTROL FLOW</span>
+                <h2>Conditional Statement & Loops</h2>
+                <p><strong>Definition (परिभाषा):</strong> Conditional statements (If-Else) faisla lene mein madad karti hain, aur Loops ek hi kaam ko baar-baar repeat karne ke liye use hote hain.</p>
+            </div>
+
+            <!-- TOPIC 17 -->
+            <div id="t17" class="content-box">
+                <span class="badge">UNIT III // ARRAYS & METHODS</span>
+                <h2>Arrays & Types of Methods</h2>
+                <p><strong>Definition (परिभाषा):</strong> Arrays ek hi jaise kai saare data ko line se store karte hain, aur methods alag-alag prakar ke functions hote hain.</p>
+            </div>
+
+            <!-- TOPIC 18 -->
+            <div id="t18" class="content-box">
+                <span class="badge">UNIT III // PROCEDURES</span>
+                <h2>Creating Sub Procedures and Functions</h2>
+                <p><strong>Definition (परिभाषा):</strong> Sub procedure kaam karta hai par value wapas nahi deta, jabki Function calculation karke ek value wapas (return) deta hai.</p>
+            </div>
+
+            <!-- TOPIC 19 -->
+            <div id="t19" class="content-box">
+                <span class="badge">UNIT III // ERRORS</span>
+                <h2>Exception Handling (Try, Catch, Finally, Throw)</h2>
+                <p><strong>Definition (परिभाषा):</strong> Program chaltay waqt achanak aane wali errors ko rokne ke liye try, catch aur finally ka use karke application ko crash hone se bachaya jata hai.</p>
+            </div>
+
+            <!-- TOPIC 20 -->
+            <div id="t20" class="content-box">
+                <span class="badge">UNIT III // GUI FORMS</span>
+                <h2>GUI Window Forms: Showing & Hiding</h2>
+                <p><strong>Definition (परिभाषा):</strong> Windows forms par <code>Show()</code> ka use karke form ko dikhaya jata hai aur <code>Hide()</code> se chupaya jata hai[span_0](start_span)[span_0](end_span).</p>
+            </div>
+
+            <!-- TOPIC 21 -->
+            <div id="t21" class="content-box">
+                <span class="badge">UNIT III // BASIC CONTROLS</span>
+                <h2>Textbox, RichTextBox, Label & Button</h2>
+                <p><strong>Definition (परिभाषा):</strong> Yeh sabhi basic UI elements hain jinki madad se user kuch likh sakta hai, padh sakta hai ya button dabakar command de sakta hai[span_1](start_span)[span_1](end_span).</p>
+            </div>
+
+            <!-- TOPIC 22 -->
+            <div id="t22" class="content-box">
+                <span class="badge">UNIT III // SELECTION CONTROLS</span>
+                <h2>Listbox, Combobox, Checkbox, Radio & Toggle</h2>
+                <p><strong>Definition (परिभाषा):</strong> In controls ki madad se user lists mein se options chun sakta hai ya tick/radio select kar sakta hai[span_2](start_span)[span_2](end_span).</p>
+            </div>
+
+            <!-- TOPIC 23 -->
+            <div id="t23" class="content-box">
+                <span class="badge">UNIT III // CONTAINERS & UTILS</span>
+                <h2>Panel, Groupbox, Scrollbar & Timer</h2>
+                <p><strong>Definition (परिभाषा):</strong> Panel aur Groupbox controls ko sajane ke kaam aate hain, Scrollbar page ko upar-neeche karne ke liye, au            <!-- TOPIC 20 -->
+            <div id="t20" class="content-box">
+                <span class="badge">UNIT III // GUI FORMS</span>
+                <h2>GUI Window Forms: Showing & Hiding</h2>
+                <p><strong>Definition (परिभाषा):</strong> Windows forms par <code>Show()</code> method ka use karke form ko screen par display kiya jata hai aur <code>Hide()</code> method se form ko invisible (chupaya) jata hai bina use close kiye[span_1](start_span)[span_1](end_span).</p>
+                <div class="flowchart-card">
+                    [Form.Show()] &rarr; [Screen par Dikhai Deta Hai] <br>
+                    [Form.Hide()] &rarr; [Background mein Chup jata hai]
+                </div>
+            </div>
+
+            <!-- TOPIC 21 -->
+            <div id="t21" class="content-box">
+                <span class="badge">UNIT III // BASIC CONTROLS</span>
+                <h2>Textbox, RichTextBox, Label & Button</h2>
+                <p><strong>Definition (परिभाषा):</strong> Yeh sabhi basic UI elements hain jinki madad se user kuch likh sakta hai (Textbox), lamba text format kar sakta hai (RichTextBox), text padh sakta hai (Label), ya click karke command de sakta hai (Button)[span_2](start_span)[span_2](end_span).</p>
+                <div class="grid-2">
+                    <div class="card-sub">
+                        <h4>Features (विशेषताएं)</h4>
+                        <ul>
+                            <li>User interaction ko aasan banate hain.</li>
+                        </ul>
+                    </div>
+                    <div class="card-sub">
+                        <h4>Real-life Example</h4>
+                        <ul>
+                            <li>Jaise login form mein username likhne ke liye textbox aur submit ke liye button hota hai.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOPIC 22 -->
+            <div id="t22" class="content-box">
+                <span class="badge">UNIT III // SELECTION CONTROLS</span>
+                <h2>Listbox, Combobox, Checkbox, Radio & Toggle</h2>
+                <p><strong>Definition (परिभाषा):</strong> In controls ki madad se user lists mein se options chun sakta hai, multiple items select kar sakta hai (Checkbox), ya single choice de sakta hai (Radio button)[span_3](start_span)[span_3](end_span).</p>
+            </div>
+
+            <!-- TOPIC 23 -->
+            <div id="t23" class="content-box">
+                <span class="badge">UNIT III // CONTAINERS & UTILS</span>
+                <h2>Panel, Groupbox, Scrollbar & Timer</h2>
+                <p><strong>Definition (परिभाषा):</strong> Panel aur Groupbox controls ko group karne ke kaam aate hain, Scrollbar page ko upar-neeche karne ke liye, aur Timer background mein samay (time intervals) ke hisab se events chalane ke liye hota hai[span_4](start_span)[span_4](end_span).</p>
+            </div>
+
+            <!-- TOPIC 24 -->
+            <div id="t24" class="content-box">
+                <span class="badge">UNIT III // DIALOGS</span>
+                <h2>Dialog Boxes (Open, Save, Print, Font, Color)</h2>
+                <p><strong>Definition (परिभाषा):</strong> Yeh system ke bane-banaye pop-up windows hote hain jo file kholne (OpenFileDialog), save karne (SaveFileDialog), print nikalne, font badalne, ya color pick karne ke liye use hote hain[span_5](start_span)[span_5](end_span).</p>
+            </div>
+
+            <!-- TOPIC 25 -->
+            <div id="t25" class="content-box">
+                <span class="badge">UNIT IV // MENUS & ALERTS</span>
+                <h2>Menus, Sub-menus, Msgbox & Inputbox</h2>
+                <p><strong>Definition (परिभाषा):</strong> Menu strips se application upar se control hoti hai, Msgbox screen par chota message alert dikhane ke liye aur Inputbox user se choti value lene ke liye hota hai[span_6](start_span)[span_6](end_span).</p>
+            </div>
+
+            <!-- TOPIC 26 -->
+            <div id="t26" class="content-box">
+                <span class="badge">UNIT IV // DATABASE</span>
+                <h2>ADO.NET Architecture & Net Data Provider</h2>
+                <p><strong>Definition (परिभाषा):</strong> ADO.NET ek aesi takneek hai jo software ko database (jaise SQL Server) ke sath jodne aur data lene-dene ka kaam karti hai. Isme Data Providers (SqlConnection, SqlCommand) mukhya hote hain[span_7](start_span)[span_7](end_span).</p>
+                <div class="flowchart-card">
+                    [Windows Forms App] &rarr; [ADO.NET Data Providers] &rarr; [Database (SQL Server)]
+                </div>
+            </div>
+
+            <!-- TOPIC 27 -->
+            <div id="t27" class="content-box">
+                <span class="badge">UNIT IV // DATASET</span>
+                <h2>Dataset Components & Server Explorer</h2>
+                <p><strong>Definition (परिभाषा):</strong> Dataset memory ke andar data ki ek choti disconnected copy banakar rakhta hai, aur Server Explorer se hum Visual Studio ke andar database ko aasani se manage karte hain[span_8](start_span)[span_8](end_span).</p>
+            </div>
+
+            <!-- TOPIC 28 -->
+            <div id="t28" class="content-box">
+                <span class="badge">UNIT IV // ADAPTERS</span>
+                <h2>Data Adapters & Data Readers</h2>
+                <p><strong>Definition (परिभाषा):</strong> DataAdapter database aur dataset ke beech pull-push ka kaam karta hai, jabki DataReader data ko tezi se read-only forward-only form mein padhne ke liye hota hai[span_9](start_span)[span_9](end_span).</p>
+            </div>
+
+            <!-- TOPIC 29 -->
+            <div id="t29" class="content-box">
+                <span class="badge">UNIT IV // CONNECTIVITY</span>
+                <h2>Command Objects & Creating Database Applications</h2>
+                <p><strong>Definition (परिभाषा):</strong> Command object database par SQL queries chalata hai jisse hum live windows forms par data save, update ya delete kar sakte hain[span_10](start_span)[span_10](end_span).</p>
+            </div>
+
+            <!-- TOPIC 30 -->
+            <div id="t30" class="content-box">
+                <span class="badge">UNIT IV // GRID BINDING</span>
+                <h2>Data Bind Controls & Displaying Data in DataGrid</h2>
+                <p><strong>Definition (परिभाषा):</strong> Iska use karke database ka sara data ek table jaisi grid (DataGridView) mein screen par saaf-saaf display kiya jata hai[span_11](start_span)[span_11](end_span).</p>
+            </div>
+
+            <div class="action-bar">
+                <button class="btn" onclick="loadTopic('t1')">🏠 Home Start</button>
+                <button class="btn pdf-btn" onclick="window.print();">📥 Print / Export Notes PDF</button>
+            </div>
+
+            <div class="creator-tag">✨ Created by Palak Gupta</div>
+        </div>
+    </div>
+
+</body>
+</html>
