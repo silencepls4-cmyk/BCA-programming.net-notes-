@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming in .NET - Unit 1 Live Interactive Portal</title>
+    <style>
+        :root {
+            --bg-dark: #05070b;
+            --card-bg: #0f172a;
+            --primary: #38bdf8;
+            --secondary: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --accent: #f43f5e;
+            --code-bg: #090d16;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.8; margin: 0; padding: 20px; background-color: var(--bg-dark); color: var(--text-main); }
+        
+        header { background: linear-gradient(135deg, #0f172a, #1e293b); border: 1px solid var(--border); padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); }
+        h1, h2, h3 { color: var(--primary); }
+        header h1 { margin: 0; font-size: 2.2em; font-weight: 800; }
+        header p { color: var(--text-muted); font-size: 1.05em; margin-top: 5px; }
+
+        .units-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .unit-nav-btn { background: #1e293b; color: var(--text-main); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; border: 1px solid var(--border); transition: all 0.2s; }
+        .unit-nav-btn:hover, .unit-nav-btn.active-unit { background: var(--primary); color: #05070b; border-color: var(--primary); }
+
+        .portal-layout { display: flex; gap: 25px; flex-wrap: wrap; }
+        
+        .sidebar { flex: 1.3; min-width: 320px; background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; height: 82vh; overflow-y: auto; }
+        .sidebar h3 { color: var(--text-main); border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-top: 0; position: sticky; top: 0; background: var(--card-bg); z-index: 10; }
+        
+        .unit-group { font-size: 0.9em; font-weight: 700; color: var(--secondary); text-transform: uppercase; margin: 15px 0 8px 0; letter-spacing: 1px; border-left: 3px solid var(--secondary); padding-left: 8px; }
+        .topic-link { display: block; background: #05070b; color: var(--text-muted); padding: 11px 14px; margin: 6px 0; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.92em; border: 1px solid var(--border); transition: all 0.2s ease; cursor: pointer; }
+        .topic-link:hover, .topic-link.active { background: #38bdf815; color: var(--primary); border-color: var(--primary); padding-left: 18px; }
+
+        .main-panel { flex: 2.5; min-width: 320px; background: var(--card-bg); border: 1px solid var(--border); padding: 35px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.5); height: 82vh; overflow-y: auto; }
+
+        .content-box { display: none; }
+        .content-box.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .badge { background: #10b98120; color: var(--secondary); padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: 700; display: inline-block; margin-bottom: 12px; border: 1px solid var(--secondary); }
+        
+        /* Dynamic Animated Flowchart (GIF-like pulse effect) */
+        .dynamic-flowchart { background: var(--code-bg); border: 2px dashed var(--primary); padding: 20px; border-radius: 10px; text-align: center; font-family: monospace; font-weight: bold; color: var(--primary); margin: 20px 0; font-size: 1.05em; animation: pulseBorder 2s infinite; }
+        @keyframes pulseBorder { 0% { border-color: var(--primary); } 50% { border-color: var(--secondary); } 100% { border-color: var(--primary); } }
+
+        /* Live Code Sandbox Box */
+        .live-code-box { background: var(--code-bg); border: 1px solid var(--border); border-left: 4px solid var(--secondary); padding: 15px; border-radius: 6px; font-family: 'Courier New', Courier, monospace; color: #34d399; margin: 15px 0; overflow-x: auto; white-space: pre-wrap; font-size: 0.95em; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .card-sub { background: var(--code-bg); padding: 18px; border-radius: 8px; border: 1px solid var(--border); }
+        .card-sub h4 { margin-top: 0; color: var(--secondary); font-size: 1.05em; }
+
+        ul { margin: 10px 0; padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 8px; font-size: 0.95em; }
+        li strong { color: var(--text-main); }
+
+        .action-bar { margin-top: 35px; border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .btn { display: inline-block; padding: 12px 22px; background: var(--primary); color: #05070b; text-decoration: none; border-radius: 6px; font-weight: 700; border: none; cursor: pointer; }
+        .pdf-btn { background: var(--secondary); color: #fff; }
+
+        .creator-tag { margin-top: 20px; font-style: italic; color: var(--accent); text-align: center; font-size: 1em; font-weight: bold; }
+    </style>
+    <script>
+        function loadTopic(topicId) {
+            var boxes = document.getElementsByClassName('content-box');
+            for (let box of boxes) box.classList.remove('active');
+            
+            var links = document.getElementsByClassName('topic-link');
+            for (let link of links) link.classList.remove('active');
+            
+            document.getElementById(topicId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Programming in .NET (CASC-14T)</h1>
+        <p>BCA V Semester - Unit 1 Live Interactive Master Portal</p>
+    </header>
+
+    <div class="units-nav">
+        <a href="index.html" class="unit-nav-btn active-unit">Unit I: .NET Intro</a>
+        <a href="unit2.html" class="unit-nav-btn">Unit II: Windows Forms</a>
+        <a href="unit3.html" class="unit-nav-btn">Unit III: Control & GUI</a>
+        <a href="unit4.html" class="unit-nav-btn">Unit IV: ADO.NET</a>
+    </div>
+
+    <div class="portal-layout">
+        <div class="sidebar">
+            <h3>Unit 1 Syllabus Index</h3>
+            <div class="unit-group">15 Dynamic Topics</div>
+            <a class="topic-link active" onclick="loadTopic('t1')">1. Overview of .NET Framework</a>
+            <a class="topic-link" onclick="loadTopic('t2')">2. Features and Architecture</a>
+            <a class="topic-link" onclick="loadTopic('t3')">3. Managed Execution Process</a>
+            <a class="topic-link" onclick="loadTopic('t4')">4. CLR (Common Language Runtime)</a>
+            <a class="topic-link" onclick="loadTopic('t5')">5. Common Language Specification</a>
+            <a class="topic-link" onclick="loadTopic('t6')">6. JIT Compilation</a>
+            <a class="topic-link" onclick="loadTopic('t7')">7. MSIL (Intermediate Language)</a>
+            <a class="topic-link" onclick="loadTopic('t8')">8. Namespace</a>
+            <a class="topic-link" onclick="loadTopic('t9')">9. Assemblies</a>
+            <a class="topic-link" onclick="loadTopic('t10')">10. Metadata</a>
+            <a class="topic-link" onclick="loadTopic('t11')">11. Common Type System (CTS)</a>
+            <a class="topic-link" onclick="loadTopic('t12')">12. System Namespace</a>
+            <a class="topic-link" onclick="loadTopic('t13')">13. Visual & Event-Driven Dev</a>
+            <a class="topic-link" onclick="loadTopic('t14')">14. Cross-Language Interoperability</a>
+            <a class="topic-link" onclick="loadTopic('t15')">15. Garbage Collection</a>
+        </div>
+
+        <div class="main-panel">
+            
+            <div id="t1" class="content-box active">
+                <span class="badge">UNIT 1 // TOPIC 1</span>
+                <h2>Overview of .NET Framework</h2>
+                <p><strong>Definition (परिभाषा):</strong> .NET Framework माइक्रोसॉफ्ट द्वारा विकसित किया गया एक शक्तिशाली सॉफ्टवेयर विकास मंच है जो विभिन्न प्रकार के एप्लीकेशन को सुरक्षित रूप से विकसित करने और चलाने के लिए एकीकृत वातावरण प्रदान करता है.</p>
+                
+                <div class="dynamic-flowchart">
+                    [ User App ] &rarr; ( .NET Framework ) &rarr; [ CLR Engine ] &rarr; [ OS Base ]
+                </div>
+
+                <h3>Live Executable Code Structure:</h3>
+                <div class="live-code-box">
+Imports System
+
+Module Program
+    Sub Main()
+        Console.WriteLine("Welcome to BCA V Semester .NET Portal!")
+        Console.ReadLine()
+    End Sub
+End Module
+                </div>
+
+                <div class="grid-2">
+                    <div class="card-sub">
+                        <h4>Advantages (लाभ)</h4>
+                        <ul>
+                            <li>तेज और सुरक्षित सॉफ्टवेयर विकास।</li>
+                            <li>स्वचालित मेमोरी प्रबंधन।</li>
+                        </ul>
+                    </div>
+                    <div class="card-sub">
+                        <h4>Real-life Example</h4>
+                        <ul>
+                            <li>जैसे एक ही ऑपरेटिंग सिस्टम में कई सारे सॉफ्टवेयर आसानी से चलना।</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="t2" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 2</span>
+                <h2>Features and Architecture</h2>
+                <p><strong>Definition (परिभाषा):</strong> इसकी वास्तुकला CLR और FCL पर आधारित है जो कोड को सुरक्षित रूप से प्रबंधित और निष्पादित करती है.</p>
+                
+                <div class="dynamic-flowchart">
+                    [ C# / VB.NET Code ] &rarr; [ FCL Libraries ] &rarr; [ CLR Engine ] &rarr; [ Windows OS ]
+                </div>
+
+                <h3>Live Architecture Verification Code:</h3>
+                <div class="live-code-box">
+Dim frameworkVersion As String = Environment.Version.ToString()
+Console.WriteLine("Active .NET Version: " & frameworkVersion)
+                </div>
+            </div>
+
+            <div id="t3" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 3</span>
+                <h2>Managed Execution Process</h2>
+                <p><strong>Definition (परिभाषा):</strong> प्रबंधित निष्पादन प्रक्रिया वह विधि है जिसके तहत कोड सीधे मशीन भाषा में न बदलकर पहले MSIL में और फिर CLR के नियंत्रण में चलता है.</p>
+                
+                <div class="dynamic-flowchart">
+                    [ Source Code ] &rarr; [ Roslyn Compiler ] &rarr; [ MSIL ] &rarr; [ JIT Engine ] &rarr; [ Machine Code ]
+                </div>
+            </div>
+
+            <div id="t4" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 4</span>
+                <h2>CLR (Common Language Runtime)</h2>
+                <p><strong>Definition (परिभाषा):</strong> CLR .NET का मुख्य निष्पादन इंजन है जो मेमोरी प्रबंधन, सुरक्षा जांच और थ्रेड नियंत्रण संभालता है.</p>
+                <div class="live-code-box">
+' CLR manages thread execution and safety automatically
+Dim threadID As Integer = System.Threading.Thread.CurrentThread.ManagedThreadId
+Console.WriteLine("Current Managed Thread ID: " & threadID)
+                </div>
+            </div>
+
+            <div id="t5" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 5</span>
+                <h2>Common Language Specification (CLS)</h2>
+                <p><strong>Definition (परिभाषा):</strong> CLS नियमों का वह समूह है जो विभिन्न भाषाओं के बीच डेटा और कोड की आपसी सुसंगतता सुनिश्चित करता है.</p>
+            </div>
+
+            <div id="t6" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 6</span>
+                <h2>JIT Compilation</h2>
+                <p><strong>Definition (परिभाषा):</strong> JIT कंपाइलर रनटाइम के दौरान MSIL कोड को तुरंत मूल मशीन कोड में बदलता है.</p>
+                <div class="dynamic-flowchart">
+                    [ MSIL Bytecode ] &harr; [ JIT Compiler ] &harr; [ Native CPU Instructions ]
+                </div>
+            </div>
+
+            <div id="t7" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 7</span>
+                <h2>MSIL (Microsoft Intermediate Language)</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह एक स्वतंत्र मध्यवर्ती भाषा है जिसमें सोर्स कोड सबसे पहले अनुवादित होता है.</p>
+            </div>
+
+            <div id="t8" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 8</span>
+                <h2>Namespace</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह एक तार्किक संगठन प्रणाली है जो कक्षाओं के बीच नाम के टकराव को रोकती है.</p>
+                <div class="live-code-box">
+Namespace CollegePortal
+    Class Student
+        Public Sub Display()
+            Console.WriteLine("Student Namespace Loaded")
+        End Sub
+    End Class
+End Namespace
+                </div>
+            </div>
+
+            <div id="t9" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 9</span>
+                <h2>Assemblies</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह डिप्लॉयमेंट की मूल इकाई है जो .dll या .exe फाइलों के रूप में कोड और मेटाडेटा रखती है.</p>
+            </div>
+
+            <div id="t10" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 10</span>
+                <h2>Metadata</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह असेंबली के भीतर डेटा प्रकारों और संस्करणों की पूरी जानकारी सुरक्षित रखता है.</p>
+            </div>
+
+            <div id="t11" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 11</span>
+                <h2>Common Type System (CTS)</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह परिभाषित करता है कि सभी .NET भाषाओं में डेटा प्रकार कैसे घोषित और उपयोग किए जाएंगे.</p>
+            </div>
+
+            <div id="t12" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 12</span>
+                <h2>System Namespace</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह .NET का सबसे बुनियादी नेमस्पेस है जिसमें सभी मूलभूत डेटा प्रकार और क्लासेज होती हैं.</p>
+                <div class="live-code-box">
+' Using System Namespace directly
+System.Console.WriteLine("System Namespace Active")
+                </div>
+            </div>
+
+            <div id="t13" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 13</span>
+                <h2>Visual & Event-Driven Dev</h2>
+                <p><strong>Definition (परिभाषा):</strong> इसमें ड्रैग-एंड-ड्रॉप से डिजाइन और यूजर एक्शन (जैसे क्लिक) पर कोड निष्पादित होता है.</p>
+            </div>
+
+            <div id="t14" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 14</span>
+                <h2>Cross-Language Interoperability</h2>
+                <p><strong>Definition (परिभाषा):</strong> इसके द्वारा एक भाषा में लिखा गया कोड दूसरी भाषा के प्रोजेक्ट में आसानी से उपयोग किया जा सकता है.</p>
+            </div>
+
+            <div id="t15" class="content-box">
+                <span class="badge">UNIT 1 // TOPIC 15</span>
+                <h2>Garbage Collection</h2>
+                <p><strong>Definition (परिभाषा):</strong> यह अनुपयोगी मेमोरी को स्वचालित रूप से साफ करने वाला CLR का प्रबंधक है.</p>
+                <div class="dynamic-flowchart">
+                    [ Unused Memory Objects ] &rarr; [ GC.Collect() Called ] &rarr; [ Heap Cleared ]
+                </div>
+                <div class="live-code-box">
+' Forcing Garbage Collection manually
+GC.Collect()
+Console.WriteLine("Garbage Collector executed successfully.")
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <a href="unit2.html" class="btn">➡️ Next: Unit II पर जाएं</a>
+                <button class="btn pdf-btn" onclick="window.print();">📥 Print / Export PDF Notes</button>
+            </div>
+
+            <div class="creator-tag">✨ Created by Palak Gupta</div>
+        </div>
+    </div>
+
+</body>
+</html>
